@@ -1,0 +1,50 @@
+.btn-transclute {
+	border-color: rgb(255, 255, 255); color: rgb(255, 255, 255); background-color: rgb(255, 255, 255); width: 155px;
+}
+
+.btn-transclute:hover {
+	border-color: rgb(173, 173, 173); color: rgb(51, 51, 51); background-color: rgb(230, 230, 230);
+}
+
+th.center {
+	text-align: center;
+}
+
+thead.center {
+	text-align: center;
+}
+
+.modal-cover {
+	background-color: rgb(51, 51, 51);
+} /* Custom Bootstrap Modal's color */
+
+.datepicker{
+	z-index:1151 !important;
+} /* Custom Bootstrap Datepicker for appearing above of the Bootstrap modal */
+
+.select-picker {
+	height: 60px;
+} /* Custom Bootstrap Select-Picker*/
+
+.big-icon {
+	display: block;
+	text-align: center;
+    font-size: 1.5em;
+	vertical-align: middle;
+}
+
+.table-divider {
+	text-align: left;
+	text-decoration: bold;
+	padding-left: -10em;
+}
+
+.icon-text {
+	padding-left: 1em;
+	vertical-align: middle;
+}
+
+.icon-text-left {
+	padding-right: 1em;
+	vertical-align: middle;
+}

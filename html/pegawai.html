@@ -1,0 +1,104 @@
+<div class="row">
+	<div class="col-md-3">
+		<a href="#">
+			<div class="alert alert-info" role="alert" id="btn-pegawai-tambah" data-toggle="modal" data-target="#modal-form-pegawai" href="#">
+				<span class="glyphicon glyphicon-user big-icon" aria-hidden="true"></span><b class="icon-text">Tambah Pegawai</b>
+			</div>
+		</a>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12 col-sm-12"><!-- Table div -->
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-striped text-center" id="table-pegawai">
+						<thead>
+							<tr>
+								<th class="center">Nip</th>
+								<th class="center">Nama</th>
+								<th class="center">Golongan</th>
+								<th class="center">Jabatan</th>
+								<th class="center">SKPD</th>
+								<th class="center">Bagian</th>
+								<th class="center">&nbsp</th>
+							</tr>
+						</thead>
+						<tbody id="table">
+						</tbody>
+					</table>
+					<div>
+						<a href="#" id="prev" value="0"><span class="glyphicon glyphicon-backward"></a>
+						<a id="pageNumber">1</a>
+						<a href="#" id="next" value="0"><span class="glyphicon glyphicon-forward"></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div><!-- Table div -->
+</div>
+
+<div class="modal fade" id="modal-form-pegawai" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Tutup</span></button>
+				<h4 class="modal-title">Data Pegawai</h4>
+	        </div>
+	        <div class="modal-body">
+				<form role="form">
+					<div class="form-group">
+						<label for="form-pegawai-nip" class="control-label">NIP</label>
+						<input type="text" class="form-control" id="form-pegawai-nip" placeholder="Masukan NIP" />
+					</div>
+					<div class="form-group">
+						<label for="form-pegawai-nama" class="control-label">Nama Pegawai</label>
+						<input type="text" class="form-control" id="form-pegawai-nama" placeholder="Masukan Nama" />
+					</div>
+					<div class="form-group">
+						<label for="form-pegawai-golongan" class="control-label">Golongan</label>
+						<input type="text" class="form-control" id="form-pegawai-golongan" list="list-golongan" placeholder="Masukan Golongan" />
+						<datalist id="list-golongan">
+							<option>I A</option>
+							<option>I B</option>
+							<option>I C</option>
+							<option>I D</option>
+							<option>II A</option>
+							<option>II B</option>
+							<option>II C</option>
+							<option>II D</option>
+							<option>III A</option>
+							<option>III B</option>
+							<option>III C</option>
+							<option>III D</option>
+							<option>IV A</option>
+							<option>IV B</option>
+							<option>IV C</option>
+							<option>IV D</option>
+							<option>IV E</option>
+						</datalist>
+					</div>
+					<div class="form-group">
+						<label for="form-pegawai-jabatan" class="control-label">Jabatan</label>
+						<input type="text" class="form-control" id="form-pegawai-jabatan" placeholder="Masukan Jabatan" />
+					</div>
+					<div class="form-group">
+						<label for="form-pegawai-skpd" class="control-label">SKPD</label>
+						<input type="text" class="form-control" id="form-pegawai-skpd" list="list-skpd" placeholder="Pilih SKPD" />
+						<datalist id="list-skpd"></datalist>
+					</div>
+					<div class="form-group">
+						<label for="form-pegawai-bagian" class="control-label">Bagian</label>
+						<input type="text" class="form-control" id="form-pegawai-bagian" list="list-bagian" placeholder="Pilih Bagian" />
+						<datalist id="list-bagian"></datalist>
+					</div>
+				</form>
+	        </div><!-- modal-body -->
+	        <div class="modal-footer">
+				<button class="btn btn-primary" id="btn-simpan-pegawai" data-dismiss="modal">Simpan</button>
+				<button class="btn btn-default" data-dismiss="modal">Tutup</button>
+	        </div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

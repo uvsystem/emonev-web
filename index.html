@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/favicon.png">
+    
+    <!-- UnitedVision's CSS -->
+	<link rel="stylesheet" href="css/unitedvision-site.css">
+
+    <!-- Bootstrap's CSS -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/datepicker.css">
+	<link rel="stylesheet" href="css/dashboard.css">
+	<link rel="stylesheet" href="css/google-font.css">
+	
+    <title>Sistem Absensi</title>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+
+        <div class="navbar-header col-md-2">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a id="link-sangihe" class="navbar-brand" href="#">Kab. Sangihe</a>
+        </div>
+
+		<!-- Navigation -->
+        <div id="navigation-panel" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a id="nav-home" href="#">Home</a></li>
+			<li role="presentation" class="dropdown">
+			    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+			      Menu<span class="caret"></span>
+			    </a>
+			    <ul class="dropdown-menu" role="menu" id="menu-nav"></ul>
+			</li>
+			<li role="presentation" class="dropdown">
+			    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+			      <b id="operator-nama" class="icon-text-left">Nama Operator</b>
+				  <span class="glyphicon glyphicon-user big-icon pull-right"></span>
+			    </a>
+			    <ul class="dropdown-menu" role="menu">
+					<li><a id="nav-user" href="#">Edit<span class="glyphicon glyphicon-pencil pull-right"></span></a></li>
+					<li><a id="nav-logout" href="#">Keluar<span class="glyphicon glyphicon-user pull-right"></span></a></li>
+			    </ul>
+			</li>
+          </ul>
+        </div><!-- Navigation -->
+		
+      </div> <!-- container-fluid -->
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+
+		<!-- sidebar menu -->
+        <div id="menu-panel" class="col-sm-2 col-md-2 sidebar">
+		  <input id="search" type="text" class="form-control" placeholder="Cari..." />
+          <ul class="nav nav-sidebar" id="nav-menu"></ul>
+        </div>
+		<!-- end of sidebar -->
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+		  <div id="message"></div>
+		  <div id="content">Konten Halaman</div>
+        </div>
+
+		<div class="modal fade" id="waitModal" role="dialog" value="false">
+			<div class="modal-dialog">
+				<div class="modal-content modal-cover">
+					<div class="modal-header">
+						<h1 class="modal-title">Loading</h1>
+					</div>
+					<div class="modal-body">
+						<div class="progress progress-striped active">
+							<div class="bar" style="width: 100%;"></div>
+						</div>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->'
+
+      </div> <!-- row -->
+    </div> <!-- container-fluid -->
+
+	<!-- Required Library -->	
+	<!-- jQuery Library -->
+    <script src="js/jquery.min.js"></script>
+
+    <!-- Bootstrap's JS -->
+    <script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script src="js/bootstrap-select.min.js"></script>
+	<script src="js/tooltip.js"></script>
+
+    <!-- UnitedVision's JS -->
+    <script src="js/uvs-api.js"></script>
+    <script src="js/uvs-object.js"></script>
+    <script src="js/uvs-controller.js"></script>
+
+  </body>
+</html>

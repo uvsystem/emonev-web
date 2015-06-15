@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://getbootstrap.com/examples/signin/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="Deddy Ch. Kakunsi">
+    <link rel="icon" href="images/favicon.png">
+
+    <title>Sistem Absensi | Login</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/signin.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <form class="form-login">
+        <h2 class="form-login-heading">Silahkan Login</h2>
+        <label for="username" class="sr-only">Username</label>
+        <input type="text" id="username" class="form-control" placeholder="Username" required="" autofocus="">
+        <label for="password" class="sr-only">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Password" required="">
+        <button id="btn-login" class="btn btn-lg btn-primary btn-block" type="button">Login</button>
+      </form>
+
+    </div> <!-- /container -->
+	
+	<!-- Wait Modal-->
+	<div class="modal fade" id="waitModal" role="dialog" value="false">
+		<div class="modal-dialog">
+			<div class="modal-content modal-cover">
+				<div class="modal-header">
+					<h1 class="modal-title">Loading</h1>
+				</div>
+				<div class="modal-body">
+					<div class="progress progress-striped active">
+						<div class="bar" style="width: 100%;"></div>
+					</div>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->'
+
+	<!-- Required Library --> 
+	<!-- jQuery Library -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Bootstrap's JS -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Doc's JS -->
+    <script src="js/docs.min.js"></script>
+
+    <!-- UnitedVision's JS -->
+    <script src="js/uvs-api.js"></script>
+    <script src="js/uvs-object.js"></script>
+    <script src="js/login.js"></script>
+  </body>
+</html>
