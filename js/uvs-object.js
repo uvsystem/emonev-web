@@ -10,6 +10,39 @@
  */
 
 /*
+ * Wait modal.
+ */
+waitModal = {
+
+    shown: false,
+
+	show: function () {
+		
+		var element = $( '#waitModal' );
+		
+		if ( element.val() == 'false' || element.val() == false ) {
+			
+			element.modal( 'show' );
+			element.val( true );
+			
+		}
+	},
+    
+	hide: function () {
+
+		var element = $( '#waitModal' );
+		
+		if ( element.val() == 'true' || element.val() == true ) {
+
+			element.modal( 'hide' );
+			element.val( false );
+			
+		}
+	}
+
+};
+
+/*
  * Home Object
  */
 var home = {
@@ -23,62 +56,17 @@ var home = {
 	},
 	
 	setData: function() {
-
-		rest.callAjax(
-			{
-				path: '/perusahaan/detail.php', 
-				
-				data:
-				{
-					bulan: myDate.getBulan(),
-					tahun: myDate.getTahun()
-				},
-				
-				method: 'POST', 
-				
-				success: function( result )
-				{ 
-
-					$( '#pemasukan' ).val( number.addCommas( result.object.income ) );
-					$( '#pengeluaran' ).val( number.addCommas( result.object.expanse ) );
-					$( '#laba' ).val( number.addCommas( result.object.laba ) );
-					
-				}, 
-				
-				error: function( result )
-				{
-
-					$( '#pemasukan' ).val( 'Data tidak ditemukan' );
-					$( '#pengeluaran' ).val( 'Data tidak ditemukan' );
-					$( '#laba' ).val( 'Data tidak ditemukan' );
-				}
-			}
-		);
+		
+		throw new Error( 'Not Supported' );
+		
 	},
 	
 	load: function() {
 
 		page.setName( home.nama );
 
-		//home.getContent();
-		//home.setData();
-		
-		message.writeLog( 'loading home page content' ); // LOG
-
 	}
 	
-};
-
-var user = {
-
-	nama: 'USER',
-	
-	load: function() {
-
-		page.setName( home.nama );
-		
-		message.writeLog( 'loading user page content' ); // LOG
-	}
 };
 
 /*
@@ -130,9 +118,8 @@ var skpd = {
 		
 	},
 	
-
 	content: {
-	 
+
 		setData: function( list, pageNumber ) {
 
 			if ( !list )
@@ -205,7 +192,7 @@ var skpd = {
 	
 	loader: {
 	
-		loadSearch: function( keyword ) {
+		search: function( keyword ) {
 		
 			var onSuccess = function( result ) {
 			
@@ -218,21 +205,24 @@ var skpd = {
 			
 		}
 	}
+	
 };
 
 /*
  * Definisi resources untuk data bagian/bidang.
  */
-var bagian = {
+var kegiatan = {
 	
-	nama: 'BAGIAN',
+	nama: 'KEGIATAN',
 	
 	currentObject: null,
 		
 	defaultObject: {
 		id: 0,
-		kode: 'DEFAULT',
 		nama: '',
+		anggaran: 0,
+		awal: '',
+		akhir: '',
 		skpd:{
 			id: 0,
 			kode: 'DEFAULT',
@@ -244,9 +234,9 @@ var bagian = {
 
 		message.success( result );
 		
-		bagian.reload();
+		kegiatan.reload();
 		
-		bagian.currentObject = null;
+		kegiatan.currentObject = null;
 
 	},
 	
@@ -254,26 +244,37 @@ var bagian = {
 
 		var onSuccess = function( result ) {
 		
-			bagian.load( result.list );
+			kegiatan.load( result.list );
 			
-			storage.set( result.list, bagian.nama );
+			storage.set( result.list, kegiatan.nama );
 		
 		};
 		
-		rest.call( '/bagian', null, 'GET', onSuccess, message.error );
+		if ( operator.getRole() == 'ADMIN' ) {
+			
+			rest.call( '/kegiatan', null, 'GET', onSuccess, message.error );
+			
+		} else if ( operator.getRole() == 'OPERATOR' ) {
+			
+			rest.call( '/kegiatan/skpd/' + operator.getSkpd().id, null, 'GET', onSuccess, message.error );
+			
+		} else {
 
+		throw new Error( 'Role undefined ' + operator.getRole() );
+			
+		}
+		
 	},
 	
 	load: function( list ) {
 
-		page.setName( bagian.nama );
+		page.setName( kegiatan.nama );
 		
-		bagian.content.getContent();
+		kegiatan.content.getContent();
 		
-		bagian.content.setData( list );
+		kegiatan.content.setData( list );
 		
 	},
-	
 
 	content: {
 	 
@@ -282,7 +283,7 @@ var bagian = {
 			if ( !list )
 				list = [ ];
 	
-			activeContainer = bagian;
+			activeContainer = kegiatan;
 			activeContainer.list = list;
 			
 			var firstLast = tableSet( list, pageNumber );
@@ -294,12 +295,14 @@ var bagian = {
 				var tmp = list[ index ];
 
 				html += '<tr>' +
-					'<td>' + tmp.kode + '</td>' +
-					'<td>' + tmp.nama + '</td>' +
 					'<td>' + ( !tmp.skpd ? '' : tmp.skpd.nama ) + '</td>' +
+					'<td>' + tmp.nama + '</td>' +
+					'<td>' + number.addCommas( tmp.anggaran ) + '</td>' +
+					'<td>' + tmp.awal + '</td>' +
+					'<td>' + tmp.akhir + '</td>' +
 					'<td>' +
 					'<div class="btn-group btn-group-xs">' +
-					'<button type="button" class="btn btn-danger" onclick="bagian.content.setDetail(' + tmp.id + ')" data-toggle="modal" data-target="#modal-form-bagian">Detail</button>' +
+					'<button type="button" class="btn btn-danger" onclick="realisasi.set(' + tmp.id + ')">Realisasi</button>' +
 					'</div>' +
 					'</td>' +
 					'</tr>';
@@ -312,28 +315,30 @@ var bagian = {
 		
 		getContent: function( list ) {
 
-			page.load( $( '#content' ), 'html/bagian.html' );
+			page.load( $( '#content' ), 'html/kegiatan.html' );
 			
 		},
 
 		getObject: function() {
-		
-			var object = bagian.currentObject;
-			
-			if ( !object )
-				object = choose( null, bagian.defaultObject);
 
-			object.kode = $( '#form-bagian-kode' ).val();
-			object.nama = $( '#form-bagian-nama' ).val();
-			object.skpd = storage.getByNama( skpd, $( '#form-bagian-skpd' ).val() );
-							
+			var object = kegiatan.currentObject;
+
+			if ( !object )
+				object = choose( null, kegiatan.defaultObject);
+
+			object.nama = $( '#form-kegiatan-nama' ).val();
+			object.skpd = storage.getByNama( skpd, $( '#form-kegiatan-skpd' ).val() );
+			object.anggaran = $( '#form-kegiatan-anggaran' ).val();
+			object.awal = $( '#form-kegiatan-awal' ).val();
+			object.akhir = $( '#form-kegiatan-akhir' ).val();
+
 			return object;
-		
+
 		},
 
 		setDetail: function( id ) {
 
-			var obj = storage.getById( bagian, id );
+			var obj = storage.getById( kegiatan, id );
 			
 			this.resetForm( obj );
 			
@@ -342,30 +347,34 @@ var bagian = {
 		},
 		
 		resetForm: function( obj ) {
+			
+			page.change( $( '#list-skpd' ), page.list.option.generateFromStorage( skpd.nama ) );
 
-			$( '#form-bagian-kode' ).val( obj.kode );
-			$( '#form-bagian-nama' ).val( obj.nama );
+			$( '#form-kegiatan-nama' ).val( obj.nama );
+			$( '#form-kegiatan-anggaran' ).val( obj.anggaran );
+			$( '#form-kegiatan-awal' ).val( obj.awal );
+			$( '#form-kegiatan-akhir' ).val( obj.akhir );
 			
 			var namaSkpd = ( obj.skpd ) ? obj.skpd.nama : '';
-			$( '#form-bagian-skpd' ).val( namaSkpd );
+			$( '#form-kegiatan-skpd' ).val( namaSkpd );
 			
-			bagian.currentObject = obj;
+			kegiatan.currentObject = obj;
 		
 		},		
 	},
 	
 	loader: {
 	
-		loadSearch: function( keyword ) {
+		search: function( keyword ) {
 		
 			var onSuccess = function( result ) {
 			
 				var list = page.list.get( result );
-				bagian.load( list );
+				kegiatan.load( list );
 				
 			};
 			
-			rest.call( '/bagian/search/' + keyword, '', 'GET', onSuccess, message.error );
+			rest.call( '/kegiatan/search/' + keyword, '', 'GET', onSuccess, message.error );
 			
 		},
 		
@@ -374,57 +383,62 @@ var bagian = {
 			var onSuccess = function( result ) {
 			
 				var list = page.list.get( result );
-				bagian.load( list );
+				kegiatan.load( list );
 				
 			};
 			
-			rest.call( '/bagian/skpd/' + id, '', 'GET', onSuccess, message.error );
+			rest.call( '/kegiatan/skpd/' + id, '', 'GET', onSuccess, message.error );
+			
+		},
+		
+		getById: function ( id, onSuccess ) {
+			
+			rest.call( '/kegiatan/' + id, '', 'GET', onSuccess, message.error );
 			
 		}
 	}
 };
 
 /*
- * Definisi resources untuk operatorAbsen.
+ * Definisi resources untuk operatorMonev.
  * Sangat tergantung pada variable page (api.js).
  */
-var operatorAbsen = {
+var operatorMonev = {
 	
 	nama: 'OPERATOR',
-	
-	searchBy: '',
 
 	list: null,
 	
 	currentObject: null,
 	
 	defaultObject: {
+		id: 0,
 		username: '',
 		password: '',
-		tipe:'',
+		role:'',
 		skpd:{
+			id: 0,
 			nama: ''
-		},
-		deskripsi:''
+		}
 	},
 
 	success: function ( result ) {
 
 		message.success( result );
 		
-		operatorAbsen.reload();
+		operatorMonev.reload();
 		
-		operatorAbsen.currentObject = null;
+		operatorMonev.currentObject = null;
 
 	},
 
 	load: function( list ) {
 
-		page.setName( operatorAbsen.nama );
+		page.setName( operatorMonev.nama );
 		
-		operatorAbsen.content.getContent();
+		operatorMonev.content.getContent();
 		
-		operatorAbsen.content.setData( list );
+		operatorMonev.content.setData( list );
 		
 	},
 	
@@ -432,9 +446,9 @@ var operatorAbsen = {
 
 		var onSuccess = function( result ) {
 		
-			operatorAbsen.load( result.list );
+			operatorMonev.load( result.list );
 			
-			storage.set( result.list, operatorAbsen.nama );
+			//storage.set( result.list, operatorMonev.nama );
 		
 		};
 		
@@ -449,7 +463,7 @@ var operatorAbsen = {
 			if ( !list )
 				list = [ ];
 	
-			activeContainer = operatorAbsen;
+			activeContainer = operatorMonev;
 			activeContainer.list = list;
 			
 			var firstLast = tableSet( list, pageNumber );
@@ -463,11 +477,11 @@ var operatorAbsen = {
 				html += '<tr>' +
 					'<td>' + tmp.username + '</td>' +
 					'<td>' + tmp.password + '</td>' +
-					'<td>' + tmp.tipe + '</td>' +
+					'<td>' + tmp.role + '</td>' +
 					'<td>' + ( tmp.skpd ? tmp.skpd.nama : '') + '</td>' +
 					'<td>' +
 					'<div class="btn-group btn-group-xs">' +
-					'<button type="button" class="btn btn-danger" onclick="operatorAbsen.content.setDetail(' + tmp.username + ')" data-toggle="modal" data-target="#modal-form-operator">Detail</button>' +
+					'<button type="button" class="btn btn-danger" onclick="operatorMonev.content.setDetail(' + tmp.username + ')" data-toggle="modal" data-target="#modal-form-operator">Detail</button>' +
 					'</div>' +
 					'</td>' +
 					'</tr>';
@@ -486,15 +500,14 @@ var operatorAbsen = {
 
 		getObject: function() {
 		
-			var object = operatorAbsen.currentObject;
+			var object = operatorMonev.currentObject;
 			
 			if ( !object )
-				object = choose( null, operatorAbsen.defaultObject);
+				object = choose( null, operatorMonev.defaultObject);
 
 			object.username = $( '#form-operator-username' ).val();
 			object.password = $( '#form-operator-password' ).val();
-			object.tipe = $( '#form-operator-tipe' ).val();
-			object.deskripsi = $( '#form-operator-deskripsi' ).val();
+			object.role = $( '#form-operator-role' ).val();
 			object.skpd = storage.getByNama( skpd, $( '#form-operator-lokasi' ).val() );
 				
 			return object;
@@ -503,7 +516,7 @@ var operatorAbsen = {
 
 		setDetail: function( username ) {
 
-			var obj = storage.getByUsername( operatorAbsen, username );
+			var obj = storage.getByUsername( operatorMonev, username );
 			
 			this.resetForm( obj );
 			
@@ -515,345 +528,121 @@ var operatorAbsen = {
 
 			$( '#form-operator-username' ).val( obj.username );
 			$( '#form-operator-password' ).val( obj.password );
-			$( '#form-operator-tipe' ).val( obj.tipe );
-			$( '#form-operator-lokasi' ).val( obj.skpd.nama );
-			$( '#form-operator-deskripsi' ).val( obj.deskripsi );
+			$( '#form-operator-role' ).val( obj.tipe );
+			$( '#form-operator-skpd' ).val( obj.skpd.nama );
 			
-			operatorAbsen.currentObject = obj;
+			operatorMonev.currentObject = obj;
 		
 		},		
+
 	},
 	
 	loader: {
-	
-		loadByUsername: function( username ) {
 		
-			var url = '/operator/' + username;
+		search: function( keyword ) {
 			
 			var onSuccess = function( result ) {
 			
 				var list = page.list.get( result );
-				operatorAbsen.load( list );
+				operatorMonev.content.setData( list );
 				
 			};
 			
-			rest.call( url, '', 'GET', onSuccess, message.error );
-			
-		},
-		
-		loadByTipe: function( tipe ) {
-			
-			var url = '/operator/tipe/' + tipe;
-			
-			var onSuccess = function( result ) {
-			
-				var list = page.list.get( result );
-				operatorAbsen.load( list );
-				
-			};
-			
-			rest.call( url, obj, 'POST', onSuccess, message.error );
-			
-		},
-		
-		// Lokasi berarti SKPD, parameter lokasi adalah idSkpd.
-		loadByLokasi: function( lokasi ) {
-			
-			var url = '/operator/lokasi/' + lokasi;
-			
-			var onSuccess = function( result ) {
-			
-				var list = page.list.get( result );
-				operatorAbsen.content.setRekapBarangHabis( list );
-				
-			};
-			
-			rest.call( url, '', 'GET', onSuccess, message.error );
+			rest.call( '/operator/search/' + keyword, '', 'GET', onSuccess, message.error );
 			
 		}
 	}
 };
 
 /*
- * Definisi resources untuk absen.
+ * Definisi resources untuk realisasi.
  * Sangat tergantung pada variable page (api.js).
  */
-var absen = {
+var realisasi = {
+	
+	nama: 'REALISASI',
+	
+	kegiatan: null,
 
-	nama: 'ABSEN',
-	
-	searchBy: '',
-	
-	defaultObject: {
-		pegawai: {
-			nip: '',
-			nama: '',
-			golongan: '',
-			jabatan: '',
-			skpd: '',
-			bagian: ''
-		},
-		status: '',
-		tanggalStr: '',
-		penginput: {
-			username: ''
-		},
-		pengubah: {
-			username: ''
-		},
-		waktuAbsen: {
-			pagiStr: '',
-			tengahStr: '',
-			siangStr: '',
-			soreStr: ''
-		}
-	},
+	list: null,
 	
 	currentObject: null,
+	
+	defaultObject: {
+		kegiatan: {
+			nama: ''
+		},
+		tahun: '',
+		bulan: '',
+		anggaran: '',
+		fisik: ''
+	},
 
 	success: function ( result ) {
 
 		message.success( result );
 		
-		absen.load( result.list );
-
-		absen.currentObject = null;
-
-	},
-
-	load: function( list ) {
+		realisasi.reload();
 		
-		page.setName( absen.nama );
-		
-		absen.content.getContent();
-		
-		absen.content.setData( list );
-		
-	},
-	
-	reload: function() {
-
-		page.setName( absen.nama );
-		
-		absen.content.getContent();
-		
-	},
-
-	loader: {
-		
-		loadSearch: function( keyword ) {
-		
-			var onSuccess = function( result ) {
-			
-				var list = page.list.get( result );
-				absen.load( list );
-				
-			};
-			
-			rest.call( '/absen/search/' + keyword, '', 'GET', onSuccess, message.error );
-			
-		},
-
-		loadByNip: function( nip, tanggalAwal, tanggalAkhir ) {
-			
-			var onSuccess = function( result ) {
-
-				var list = page.list.get( result );
-				absen.load( list );
-				
-			};
-		
-			var url = '/absen/pegawai/' + nip + '/' + tanggalAwal + '/' + tanggalAkhir;
-			
-			rest.call( url, obj, 'GET', onSuccess, message.error );
-			
-		},
-
-		loadBySkpd: function( skpd, tanggalAwal, tanggalAkhir ) {
-			
-			var onSuccess = function( result ) {
-			
-				var list = page.list.get( result );
-				absen.load( list );
-				
-			};
-			
-			var url = '/absen/skpd/' + skpd + '/' + tanggalAwal + '/' + tanggalAkhir;
-			
-			rest.call( url, '', 'GET', onSuccess, message.error );
-			
-		},
-
-		loadByBagian: function( skpd, bagian, tanggalAwal, tanggalAkhir ) {
-			
-			var onSuccess = function( result ) {
-			
-				var list = page.list.get( result );
-				absen.load( list );
-				
-			};
-			
-			var url = '/absen/bagian/' + bagian + '/' + skpd + '/' + tanggalAwal + '/' + tanggalAkhir;
-			
-			rest.call( url, '', 'GET', onSuccess, message.error );
-			
-		}
-
-	},
-
-	content: {
-
-		getContent: function() {
-
-			page.load( $( '#content' ), 'html/absen.html' );
-
-			page.change( $( '#list-skpd' ), page.list.option.generateFromStorage( skpd.nama ) );
-			page.change( $( '#list-bagian' ), page.list.option.generateFromStorage( bagian.nama ) );
-			
-		},
-
-		getObject: function() {
-		
-			var object = absen.currentObject;
-			
-			if ( !object )
-				object = choose( null, absen.defaultObject );
-			
-			return object;
-			
-		},
-
-		setData: function( list, pageNumber ) {
-
-			if ( !list )
-				list = [ ];
-			
-			storage.set( list, absen.nama );
-	
-			activeContainer = absen;
-			activeContainer.list = list;
-			
-			var firstLast = tableSet( list, pageNumber );
-	
-			var html = '';	
-			
-			for ( var index = firstLast.first; index < firstLast.last; index++ ) {
-			
-				var tmp = list[ index ];
-				
-				html += '<tr>' +
-					'<td>' + tmp.pegawai.nip + '</td>' +
-					'<td>' + tmp.pegawai.nama + '</td>' +
-					'<td>' + tmp.tanggalStr + '</td>' +
-					'<td>' + tmp.status + '</td>' +
-					'<td>' + tmp.pagiStr + '</td>' +
-					'<td>' + tmp.tengahStr + '</td>' +
-					'<td>' + tmp.siangStr + '</td>' +
-					'<td>' + tmp.soreStr + '</td>' +
-					'<td>' + ( !tmp.keterangan ? '' : tmp.keterangan ) + '</td>';
-				
-					if ( operator.getRole() == 'ADMIN' && tmp.status == 'HADIR' ) {
-						html += '<td>' +
-						'<div class="btn-group btn-group-xs">' +
-						'<button type="button" class="btn btn-danger" onclick="absen.content.setDetail(' + tmp.id + ')" data-toggle="modal" data-target="#modal-form-absen">Detail</button>' +
-						'</div>' +
-						'</td>';
-					} else {
-						html += '<td>&nbsp</td>';
-					}
-					
-					html += '</tr>';
-			}
-			
-			page.change( $( '#table' ), html );
-			
-		},
-
-		setDetail: function( id ) {
-
-			var obj = storage.getById( absen, id );
-
-			this.resetForm( obj );
-
-		},
-	
-		resetForm: function( obj ) {
-			
-			$( '#form-absen-nip' ).val( obj.pegawai.nip );
-			$( '#form-absen-nama' ).val( obj.pegawai.nama );
-			$( '#form-absen-tanggal' ).val( obj.tanggal );
-			$( '#form-absen-pagi' ).val( obj.pagiStr );
-			$( '#form-absen-tengah' ).val( obj.tengahStr);
-			$( '#form-absen-siang' ).val( obj.siangStr );
-			$( '#form-absen-sore' ).val( obj.soreStr );
-		}
-		
-	}
-	
-};
-
-/*
- * Definisi resources untuk otentikasi.
- * Sangat tergantung pada variable page (api.js).
- */
-var otentikasi = {
-
-	nama: 'OTENTIKASI',
-	
-	searchBy: '',
-
-	currentObject: null,
-	
-	defaultObject: {
-		id: 0,
-	},
-
-	success: function ( result ) {
-
-		message.success( result );
-
-		otentikasi.reload();
-		
-		otentikasi.currentObject = null;
+		realisasi.currentObject = null;
 
 	},
 
 	load: function( list ) {
 
-		page.setName( otentikasi.nama );
+		page.setName( realisasi.nama );
 		
-		otentikasi.content.getContent();
+		realisasi.content.getContent();
 		
-		otentikasi.content.setData( list );
+		realisasi.content.setData( list );
 		
 	},
 	
 	reload: function() {
-		
-		var onSuccess = function( result ) {
-		
-			otentikasi.load( result.list );
+
+		kegiatan.loader.getById( realisasi.kegiatan.id, function( result ) {
 			
-			storage.set( result.list, otentikasi.nama );
-
-			page.change( $( '#list-otentikasi' ), page.list.option.generateFromStorage( otentikasi.nama ) );
+			var _kegiatan = result.model;
+			
+			realisasi.setKegiatan( _kegiatan );
+			
+		} );
 		
-		};
-		
-		var url = '/otentikasi/perusahaan.php';
+	},
+	
+	set: function( idKegiatan ) {
 
-		rest.call( url, '', 'POST', onSuccess, message.error );
+		var _kegiatan = storage.getById( kegiatan, idKegiatan);
+		
+		realisasi.setKegiatan( _kegiatan );
 
 	},
 	
+	setKegiatan: function ( _kegiatan ) {
+		
+		realisasi.kegiatan = _kegiatan;
+
+		realisasi.load( _kegiatan.listRealisasi );
+
+		page.change( $( '#form-kegiatan-skpd' ), _kegiatan.skpd.nama );
+		page.change( $( '#form-kegiatan-nama' ), _kegiatan.nama );
+		page.change( $( '#form-kegiatan-anggaran' ), number.addCommas( _kegiatan.anggaran ) );
+		page.change( $( '#form-kegiatan-awal' ), _kegiatan.awal );
+		page.change( $( '#form-kegiatan-akhir' ), _kegiatan.akhir );
+
+		page.change( $( '#form-kegiatan-realisasi-anggaran' ), number.addCommas( _kegiatan.realisasiAnggaran ) );
+		page.change( $( '#form-kegiatan-realisasi-fisik' ), number.addCommas( _kegiatan.realisasiFisik ) + ' %' );
+		
+	},
+	
 	content: {
-		 
+	 
 		setData: function( list, pageNumber ) {
 
 			if ( !list )
 				list = [ ];
 	
-			activeContainer = otentikasi;
+			activeContainer = realisasi;
 			activeContainer.list = list;
 			
 			var firstLast = tableSet( list, pageNumber );
@@ -865,236 +654,10 @@ var otentikasi = {
 				var tmp = list[ index ];
 
 				html += '<tr>' +
-					'<td>' + tmp.nama + '</td>' +
-					'<td>' + ( ( tmp.parent != null && tmp.parent != undefined ) ? tmp.parent.nama : '' )+ '</td>' +
-					'<td>' +
-					'<div class="btn-group btn-group-xs">' +
-					'<button type="button" class="btn btn-danger" onclick="otentikasi.content.setDetail(' + tmp.id + ')" data-toggle="modal" data-target="#modal-form-otentikasi">Detail</button>' +
-					'</div>' +
-					'</td>' +
-					'</tr>';
-				
-			}
-			
-			page.change( $( '#table' ), html );
-				
-		},
-
-		getContent: function( ) {
-
-			page.load( $( '#content' ), 'html/otentikasi.html' );
-			
-		},
-
-		getObject: function() {
-		
-			var object = otentikasi.currentObject;
-			
-			if ( !object )
-				object = choose( null, otentikasi.defaultObject);
-				
-			object.parent = storage.getByNama( otentikasi, $( '#form-otentikasi-parent' ).val() );
-			object.nama = $( '#form-otentikasi-nama' ).val();
-			
-			return object;
-			
-		},
-
-		setDetail: function( id ) {
-
-			var obj = storage.getById( otentikasi, id );
-			
-			this.resetForm( obj );
-			
-		},
-		
-		resetForm: function( obj ) {
-
-			$( '#form-otentikasi-parent' ).val( ( ( obj.parent != null && obj.parent != undefined ) ? obj.parent.nama : '' ) );
-			$( '#form-otentikasi-nama' ).val( obj.nama );
-
-			otentikasi.currentObject = obj;
-		
-		}
-			
-	},
-	
-	loader: {
-		
-		loadByIdParent: function( id ) {
-		
-			var _parent = storage.getById( otentikasi, id );
-
-			this.loadByParent( _parent );
-			
-		},
-		
-		loadByParent: function( _parent ) {
-		
-			var url = '/otentikasi/parent.php';
-
-			var onSuccess = function( result ) {
-			
-				var list = page.list.get( result );
-				otentikasi.load( list );
-				
-			};
-			
-			rest.call( url, _parent, 'POST', onSuccess, message.error );
-			
-		},
-
-		loadByNama: function( nama ) {
-			
-			var url = '/otentikasi/nama.php';
-			var obj = { nama: nama };
-			
-			var onSuccess = function( result ) {
-			
-				var list = page.list.get( result );
-				otentikasi.load( list );
-				
-			};
-			
-			rest.call( url, obj, 'POST', onSuccess, message.error );
-			
-		}
-	}
-
-};
-
-/*
- * Definisi resources untuk pegawai.
- * Sangat tergantung pada variable page (api.js).
- */
-var pegawai = {
-
-	nama: 'PEGAWAI',
-	
-	searchBy: '',
-	
-	defaultObject: {
-		nip: '',
-		nama: '',
-		golongan: '',
-		jabatan: '',
-		bagian: {
-			nama: '',
-			skpd: {
-				nama: ''
-			}
-		}
-	},
-	
-	currentObject: null,
-
-	listRole: [ { nama: 'OWNER'}, { nama: 'MANAGER'}, { nama: 'operatorAbsen'} ],
-	
-	success: function ( result ) {
-
-		message.success( result );
-
-		pegawai.reload( );
-
-		pegawai.currentObject = null;
-		
-	},
-
-	load: function( list ) {
-
-		page.setName( pegawai.nama );
-		
-		pegawai.content.getContent();
-		
-		pegawai.content.setData( list );
-		
-	},
-	
-	reload: function() {
-		
-		var onSuccess = function( result ) {
-		
-			pegawai.load( result.list );
-			
-			storage.set( result.list, pegawai.nama );
-		
-		};
-		
-		var url = '/pegawai';
-
-		rest.call( url, null, 'GET', onSuccess, message.error );
-		
-	},
-	
-	getListNip: function() {
-		
-		var list = storage.get( pegawai.nama );
-		var listNip = [];
-		
-		for ( var index = 0; index < list.length; index++ ) {
-			
-			var tmp = list[ index ];
-			
-			listNip[ index ] = tmp.nip;
-			
-		}
-		
-		return listNip;
-	},
-	
-	getByNip: function( nip ) {
-
-		var listPegawai = storage.get( pegawai.nama );
-		
-		for ( var index = 0; index < listPegawai.length; index++ ) {
-			
-			var tmp = listPegawai[ index ];
-			
-			message.writeLog( tmp.nip + ': ' + ( tmp.nip == nip ) );
-			
-			if ( tmp.nip == nip)
-				return tmp;
-		}
-		
-		return { nama: 'Tidak terdaftar' };
-	},
-
-	content: {
-
-		getContent: function() {
-
-			page.load( $( '#content' ), 'html/pegawai.html' );
-			
-		},
-		
-		setData: function( list, pageNumber ) {
-
-			if ( !list )
-				list = [ ];
-	
-			activeContainer = pegawai;
-			activeContainer.list = list;
-			
-			var firstLast = tableSet( list, pageNumber );
-	
-			var html = '';	
-			
-			for ( var index = firstLast.first; index < firstLast.last; index++ ) {
-			
-				var tmp = list[ index ];
-
-				html += '<tr>' +
-					'<td>' + tmp.nip + '</td>' +
-					'<td>' + tmp.nama + '</td>' +
-					'<td>' + tmp.golongan + '</td>' +
-					'<td>' + tmp.jabatan + '</td>' +
-					'<td>' + ( !tmp.bagian.skpd ? '' : tmp.bagian.skpd.nama ) + '</td>' +
-					'<td>' + tmp.bagian.nama + '</td>' +
-					'<td>' +
-					'<div class="btn-group btn-group-xs">' +
-					'<button type="button" class="btn btn-danger" onclick="pegawai.content.setDetail(' + tmp.nip + ')" data-toggle="modal" data-target="#modal-form-pegawai">Detail</button>' +
-					'</div>' +
-					'</td>' +
+					'<td>' + tmp.tahun + '</td>' +
+					'<td>' + tmp.bulan + '</td>' +
+					'<td>' + number.addCommas( tmp.anggaran ) + '</td>' +
+					'<td>' + tmp.fisik + ' %</td>' +
 					'</tr>';
 				
 			}
@@ -1103,171 +666,50 @@ var pegawai = {
 
 		},
 
-		getObject: function() {
-		
-			var object = pegawai.currentObject;
-			
-			if ( !object )
-				object = choose( null, pegawai.defaultObject );
-			
-			object.nip = $( '#form-pegawai-nip' ).val();
-			object.nama = $( '#form-pegawai-nama' ).val();
-			object.golongan = $( '#form-pegawai-golongan' ).val();
-			object.jabatan = $( '#form-pegawai-jabatan' ).val();
-			object.bagian = storage.getByNama( bagian, $( '#form-pegawai-bagian' ).val() );
-			
-			return object;
-		},
-		
-		setDetail: function( nip ) {
+		getContent: function( list ) {
 
-			var obj = storage.getByNip( pegawai, nip );
+			page.load( $( '#content' ), 'html/realisasi.html' );
+
+		},
+
+		getObject: function() {
+
+			var object = realisasi.currentObject;
+
+			if ( !object )
+				object = choose( null, realisasi.defaultObject);
+
+			object.kegiatan = realisasi.kegiatan;
+			object.tahun = $( '#form-realisasi-tahun' ).val();
+			object.bulan = $( '#form-realisasi-bulan' ).val();
+			object.anggaran = $( '#form-realisasi-anggaran' ).val();
+			object.fisik = $( '#form-realisasi-fisik' ).val();
+
+			return object;
+
+		},
+
+		setDetail: function( username ) {
 			
-			this.resetForm( obj );
-			
+			throw new Error( 'Not Supported' );
+
 		},
 		
 		resetForm: function( obj ) {
-		
-			page.change( $( '#list-skpd' ), page.list.option.generateFromStorage( skpd.nama ) );
-			page.change( $( '#list-bagian' ), page.list.option.generateFromStorage( bagian.nama ) );
 
-			$( '#form-pegawai-nip' ).val( obj.nip );
-			$( '#form-pegawai-nama' ).val( obj.nama );
-			$( '#form-pegawai-golongan' ).val( obj.golongan );
-			$( '#form-pegawai-jabatan' ).val( obj.jabatan );
-			$( '#form-pegawai-skpd' ).val( obj.bagian.skpd.nama );
-			$( '#form-pegawai-bagian' ).val( obj.bagian.nama );
-
-			pegawai.currentObject = obj;
+			$( '#form-realisasi-tahun' ).val( obj.tahun );
+			$( '#form-realisasi-bulan' ).val( obj.bulan );
+			$( '#form-realisasi-anggaran' ).val( obj.anggaran );
+			$( '#form-realisasi-fisik' ).val( obj.fisik );
+			
+			realisasi.currentObject = obj;
 		
 		}
-
+		
 	},
 	
 	loader: {
 		
-		loadSearch: function( keyword ) {
-		
-			var onSuccess = function( result ) {
-			
-				var list = page.list.get( result );
-				pegawai.load( list );
-				
-			};
-			
-			rest.call( '/pegawai/search/' + keyword, '', 'GET', onSuccess, message.error );
-			
-		},
-
-		loadByIdabsen: function( id ) {
-		
-			var _absen = storage.getById( absen, id );
-			
-			this.loadByabsen( _absen );
-		},
-		
-		loadByabsen: function( _absen ) {
-		
-			var url = '/pegawai/absen.php';
-			
-			var onSuccess = function( result ) {
-
-				var list = page.list.get( result );
-				pegawai.load( list );
-					
-			};
-
-			rest.call( url, _absen, 'POST', onSuccess, message.error );
-			
-		},
-		
-		loadByKode: function( kode ) {
-		
-			var url = '/pegawai/kode.php';
-			var obj = { kode: kode };
-			
-			var onSuccess = function( result ) {
-			
-				var list = page.list.get( result );
-				pegawai.load( list );
-				
-			};
-			
-			rest.call( url, obj, 'POST', onSuccess, message.error );
-			
-		},
-		
-		loadByNama: function( nama ) {
-			
-			var url = '/pegawai/nama.php';
-			var obj = { nama: nama };
-			
-			var onSuccess = function( result ) {
-			
-				var list = page.list.get( result );
-				pegawai.load( list );
-				
-			};
-			
-			rest.call( url, obj, 'POST', onSuccess, message.error );
-			
-		}
-	
-	}
-	
-};
-
-var rekap = {
-
-	nama: 'REKAP',
-	
-	reload: function() {
-		
-		rekap.content.getContent();
-		
-	},
-	
-	content: {
-		
-		getContent: function() {
-
-			page.load( $( '#content' ), 'html/rekap.html');
-			
-		}
-	}
-};
-
-/*
- * Wait modal.
- */
-waitModal = {
-
-    shown: false,
-
-	show: function () {
-		
-		var element = $( '#waitModal' );
-		
-		if ( element.val() == 'false' || element.val() == false ) {
-			
-			element.modal( 'show' );
-			element.val( true );
-			
-		}
-	},
-    
-	hide: function () {
-
-		var element = $( '#waitModal' );
-		
-		if ( element.val() == 'true' || element.val() == true ) {
-
-			element.modal( 'hide' );
-			element.val( false );
-			
-		}
 	}
 
 };
-

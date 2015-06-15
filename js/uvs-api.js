@@ -6,20 +6,20 @@
  * Manado, Indonesia.
  * deddy.kakunsi@gmail.com | deddykakunsi@outlook.com
  * 
- * Version: 1.1.0
+ * Version: 0.0.1
  */
  
 var myUrl = {
 
-	protocol: 'https',
+	protocol: 'http',
 	
-	apiHost: 'core-unitedvision.whelastic.net',
+	apiHost: 'localhost:8080',
 	
-	printHost: 'core-unitedvision.whelastic.net',
+	printHost: 'localhost:8080',
 	
-	apiProject: 'absensi',
+	apiProject: 'monev',
 	
-	printProject: 'absensi',
+	printProject: 'monev',
 	
 	apiUrl: function( ) {
 	
@@ -86,12 +86,10 @@ var message = {
 			case "MESSAGE": 
 					page.change( $( '#message' ), 
 						'<div id="warning-alert" class="alert alert-warning alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Error!</strong> ' + result.message + '</div>');
-					// alert( result.message );
 				break;
 			case "ERROR": 
 					page.change( $( '#message' ), 
 						'<div id="error-alert" class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Error!</strong> ' + result.message + '</div>');
-					// alert( result.message );
 				break;
 			default: console.log( "Tipe result tidak dikenali : " + result.tipe );
 		}
@@ -149,65 +147,25 @@ var message = {
  * Digunakan untuk otentikasi dan otorisasi.
  */
 var operator = {
-
-	/*
-	 * Mengambil objek token. Hanya digunakan untuk tujuan spesifik.
-	 * Jika tidak ada, return null.
-	 */
-	getToken: function() {
-		
-		var tmpToken = localStorage.getItem( 'token' );
-
-		// Ubah token menjadi JSON jika token ditemukan
-		if ( tmpToken != null ) {
-		
-			tmpToken = JSON.parse( tmpToken );
-		} else {
-		
-			message.writeLog( "Token = NULL" ); // LOG			
-		}
-			
-		return tmpToken;
-	},
-		
-	/*
-	 * Mengatur objek token. Digunakan setelah berhasil login.
-	 */
-	setToken: function( tmpToken ) {
-
-		message.writeLog( "Set token with " + tmpToken ); // LOG
-
-		if ( tmpToken != null )
-			tmpToken = JSON.stringify( tmpToken );
-
-		localStorage.setItem( 'token', tmpToken );
-	},
-		
-	/*
-	 * Mengambil token yang akan digunakan sebagai pengganti password.
-	 * Hanya bekerja jika sudah berhasil login. Jika tidak akan menghasilkan null.
-	 */
-	getTokenString: function() {
-
-		var tmpToken = this.getToken();
-		
-		if ( tmpToken == null)
-			return null;
-
-		return tmpToken.token;
-	},
-		
+	
 	/*
 	 * Mengambil objek pegawai yang berhasil login terakhir kali.
 	 */
 	getOperator: function() {
 
-		var tmpToken = this.getToken();
+		var tmp = localStorage.getItem( 'operator' );
 		
-		if ( tmpToken == null )
+		if ( !tmp )
 			return null;
-
-		return tmpToken.operator;
+		
+		return JSON.parse( tmp );
+		
+	},
+	
+	setOperator: function( op ) {
+		
+		localStorage.setItem( 'operator', JSON.stringify( op ) );
+		
 	},
 		
 	/*
@@ -216,12 +174,12 @@ var operator = {
 	 */
 	getUsername: function() {
 
-		var tmpOperator = this.getOperator();
+		var tmp = this.getOperator();
 
-		if ( tmpOperator == null) 
+		if ( !tmp ) 
 			return null;
 	
-		return tmpOperator.username;
+		return tmp.username;
 	},
 		
 	/*
@@ -230,12 +188,13 @@ var operator = {
 	 */
 	getPassword: function() {
 
-		var tmpOperator = this.getOperator();
+		var tmp = this.getOperator();
 
-		if ( tmpOperator == null)
+		if ( !tmp )
 			return null;
 
-		return tmpOperator.password;
+		return tmp.password;
+		
 	},
 				
 	/*
@@ -244,37 +203,26 @@ var operator = {
 	 */
 	getRole: function() {
 
-		var tmpOperator = this.getOperator();
+		var tmp = this.getOperator();
 
-		if ( tmpOperator == null) 
+		if ( !tmp ) 
 			return null;
 
-		return tmpOperator.tipe;
-	},
-
-	/*
-	 * Reload object token.
-	 */
-	refresh: function() {
-
-		var token = this.getToken();
-			
-		var success = function( result ) {
-
-			if ( result.tipe == 'ENTITY' ) {
-
-				var newOperator = result.model;
-				token.Operator = newOperator;
-					
-				operator.setToken( token );
-			}
-		}
-
-		var url = myUrl.apiUrl + '/operator/' + this.getUsername();
-		rest.call( url, '', 'GET', success, message.error );
+		return tmp.role;
 		
 	},
+	
+	getSkpd: function() {
 		
+		var tmp = this.getOperator();
+		
+		if ( !tmp )
+			return null;
+		
+		return tmp.skpd;
+		
+	},
+
 	/*
 	 * Reset objek token pada keadaan semula. Menghapus semua data pegawai yang berhasil login.
 	 * Setelah memanggil fungsi ini, pegawai harus login lagi untuk melakukan proses berikutnya.
@@ -283,7 +231,8 @@ var operator = {
 	reset: function() {
 
 		// Set token menjadi null. Pada sesi berikutnya, user harus login.
-		this.setToken(null);
+		this.setOperator( null );
+		
 	},
 		
 	/*
@@ -292,23 +241,13 @@ var operator = {
 	 */
 	isLogin: function() {
 
-		var tmpToken = this.getToken();
+		var tmp = this.getOperator();
 		
-		// Jika token adalah null, maka user belum login
-		if ( tmpToken == null )
+		if ( !tmp )
 			return false;
-			
-		var now = myDate.formatDate( new Date() );
-		var expire = myDate.fromString( tmpToken.expireStr );
-
-		// Jika token sudah expire, maka user dianggap belum login
-		if ( myDate.isAfter( now, expire ) ) {
-		
-			message.writeLog( "Token = expire" ); // LOG
-			return false;
-		}
 
 		return true;
+		
 	}
 };
 
@@ -329,9 +268,9 @@ var rest = {
 			return;
 				
 		}
-					
+
 		// Token menjadi pengganti password user.
-		var _password = operator.getTokenString();
+		var _password = operator.getPassword();
 		var _username = operator.getUsername();
 
 		var credential = _username + ':' + _password;
@@ -448,7 +387,7 @@ var rest = {
 	 */
 	login: function( _username, _password ) {
 
-		var data = {
+		var kredensi = {
 			username: _username,
 			password: _password
 		};
@@ -456,11 +395,11 @@ var rest = {
 		var promise = $.ajax(
 		{
 	        type: 'POST',
-	        url: myUrl.apiUrl() + '/token/create',
+	        url: myUrl.apiUrl() + '/operator/login',
 			
 			contentType: 'application/json',
 	        processData: false,
-	        data: JSON.stringify( data ),
+	        data: JSON.stringify( kredensi ),
 		        
 			beforeSend: function (jqXHR, settings)
 			{
@@ -477,7 +416,7 @@ var rest = {
 			if ( result.tipe == "OBJECT" ) {
 
 				// Atur token baru, token menggunakan RestMessage
-				operator.setToken( result.object );
+				operator.setOperator( result.object );
 
 				message.write( "Berhasil Login!" );
 				window.location.href = 'index.html';
@@ -703,21 +642,15 @@ var page = {
 				
 				return '<li class="divider"><hr /></li>' +
 					'<li><a id="menu-skpd" href="#" data-toggle="tooltip" data-placement="right" title="SKPD"><span class="glyphicon glyphicon-home big-icon"></span><b class="icon-text">SKPD</b></a></li>' +
-					'<li><a id="menu-bagian" href="#" data-toggle="tooltip" data-placement="right" title="Bagian/Bidang"><span class="glyphicon glyphicon-home big-icon"></span><b class="icon-text">Bagian</b></a></li>' +
-					'<li><a id="menu-pegawai" href="#" data-toggle="tooltip" data-placement="right" title="Pegawai"><span class="glyphicon glyphicon-user big-icon"></span><b class="icon-text">Pegawai</b></a></li>' +
-					'<li><a id="menu-absensi" href="#" data-toggle="tooltip" data-placement="right" title="Absensi"><span class="glyphicon glyphicon-calendar big-icon"></span><b class="icon-text">Absensi</b></a></li>' +
-					'<li><a id="menu-operator" href="#" data-toggle="tooltip" data-placement="right" title="Operator"><span class="glyphicon glyphicon-briefcase big-icon"></span><b class="icon-text">Operator</b></a></li>' +
-					'<li><a id="menu-rekap" href="#" data-toggle="tooltip" data-placement="right" title="Rekap"><span class="glyphicon glyphicon-briefcase big-icon"></span><b class="icon-text">Rekap</b></a></li>';
-				
-					// Fitur belum didukung pada versi ini
-					// '<li><a id="menu-otentikasi" href="#" data-toggle="tooltip" data-placement="right" title="Otentikasi"><span class="glyphicon glyphicon-tasks big-icon"></span><b class="icon-text">Otentikasi</b></a></li>';
+					'<li><a id="menu-kegiatan" href="#" data-toggle="tooltip" data-placement="right" title="Kegiatan"><span class="glyphicon glyphicon-user big-icon"></span><b class="icon-text">Kegiatan</b></a></li>' +
+					'<li><a id="menu-operator" href="#" data-toggle="tooltip" data-placement="right" title="Operator"><span class="glyphicon glyphicon-briefcase big-icon"></span><b class="icon-text">Operator</b></a></li>';
 				
 			},
 			
 			getPegawai: function() {
 				
 				return '<li class="divider"><hr /></li>' +
-					'<li><a id="menu-absensi" href="#" data-toggle="tooltip" data-placement="right" title="Absensi"><span class="glyphicon glyphicon-shopping-cart big-icon"></span><b class="icon-text">Absensi</b></a></li>';
+					'<li><a id="menu-kegiatan" href="#" data-toggle="tooltip" data-placement="right" title="Kegiatan"><span class="glyphicon glyphicon-user big-icon"></span><b class="icon-text">Kegiatan</b></a></li>';
 				
 			}
 		},
@@ -744,15 +677,14 @@ var page = {
 			
 			getAdmin: function() {
 				
-				return '<li><a id="nav-pegawai" href="#">Pegawai<span class="glyphicon glyphicon-user pull-right"></span></a></li>' +
+				return '<li><a id="nav-skpd" href="#">SKPD<span class="glyphicon glyphicon-user pull-right"></span></a></li>' +
 					'<li><a id="nav-operator" href="#">Operator<span class="glyphicon glyphicon-briefcase pull-right"></span></a></li>' +
-					'<li><a id="nav-otentikasi" href="#">Otentikasi<span class="glyphicon glyphicon-tasks pull-right"></span></a></li>' +
-					'<li><a id="nav-absensi" href="#">Absensi<span class="glyphicon glyphicon-calendar pull-right"></span></a></li>';
+					'<li><a id="nav-kegiatan" href="#">Kegiatan<span class="glyphicon glyphicon-tasks pull-right"></span></a></li>';
 			},
 			
 			getPegawai: function() {
 				
-				return '<li><a id="nav-absensi" href="#">Absensi<span class="glyphicon glyphicon-shopping-cart pull-right"></span></a></li>';
+				return '<li><a id="nav-kegiatan" href="#">Kegiatan<span class="glyphicon glyphicon-shopping-cart pull-right"></span></a></li>';
 
 			}
 		}
@@ -1349,10 +1281,8 @@ var storage = {
 
 	reset: function () {
 
-		this.fill ('Pegawai');
-		this.fill ('Operator');
-		this.fill ('Skpd');
-		this.fill ('Bagian');
+		this.fill ('SKPD');
+		this.fill ('KEGIATAN');
 
 	},
 

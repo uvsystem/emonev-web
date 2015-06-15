@@ -18,8 +18,8 @@
 							<tr>
 								<th class="center">Username</th>
 								<th class="center">Password</th>
-								<th class="center">Tipe</th>
-								<th class="center">Lokasi</th>
+								<th class="center">Role</th>
+								<th class="center">Unit Kerja</th>
 								<th class="center">&nbsp</th>
 							</tr>
 						   </thead>
@@ -55,23 +55,17 @@
 						<input type="text" class="form-control" id="form-operator-password" placeholder="Masukan Password" />
 					</div>
 					<div class="form-group">
-						<label for="form-operator-tipe" class="control-label">Tipe</label>
-						<input type="text" class="form-control" id="form-operator-tipe" list="list-tipe" placeholder="Pilih Tipe" />
-						<datalist id="list-tipe">
+						<label for="form-operator-role" class="control-label">Role</label>
+						<input type="text" class="form-control" id="form-operator-role" list="list-role" placeholder="Pilih Operator" />
+						<datalist id="list-role">
 							<option>ADMIN</option>
-							<option>PEGAWAI</option>
-							<option>PROGRAM</option>
-							<option>THIRD PARTY</option>
+							<option>OPERATOR</option>
 						</datalist>
 					</div>
 					<div class="form-group">
-						<label for="form-operator-lokasi" class="control-label">Lokasi</label>
-						<input type="text" class="form-control" id="form-operator-lokasi" list="list-skpd" placeholder="Masukan Lokasi" />
+						<label for="form-operator-unit" class="control-label">Unit Kerja</label>
+						<input type="text" class="form-control" id="form-operator-lokasi" list="list-skpd" placeholder="Masukan Unit Kerja" />
 						<datalist id="list-skpd"></datalist>
-					</div>
-					<div class="form-group">
-						<label for="form-operator-deskripsi" class="control-label">Deskripsi</label>
-						<input type="text" class="form-control" id="form-operator-deskripsi" placeholder="Masukan Deskripsi" />
 					</div>
 				</form>
 	        </div><!-- modal-body -->
@@ -82,4 +76,3 @@
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-

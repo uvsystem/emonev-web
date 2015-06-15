@@ -1,0 +1,124 @@
+<div class="row">
+	<div class="col-md-8"><!-- table -->
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-striped text-center" id="table-kategori">
+						<thead>
+							<tr>
+								<th class="center">Tahun</th>
+								<th class="center">Bulan</th>
+								<th class="center">Realisasi Anggaran</th>
+								<th class="center">Realisasi Fisik</th>
+							</tr>
+						</thead>
+						<tbody id="table">
+						</tbody>
+					</table>
+					<div>
+						<a href="#" id="prev" value="0"><span class="glyphicon glyphicon-backward"></a>
+						<a id="pageNumber">1</a>
+						<a href="#" id="next" value="0"><span class="glyphicon glyphicon-forward"></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div><!-- table -->
+	<div class="col-md-4"><!-- detail kegiatan -->
+		<div class="row">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h4>Data Kegiatan</h4>
+				</div>
+				<div class="panel-body">
+					<form role="form">
+						<div class="form-group">
+							<label for="form-kegiatan-skpd" class="control-label">Unit Kerja: <b id="form-kegiatan-skpd"></b></label>
+						</div>
+						<div class="form-group">
+							<label for="form-kegiatan-nama" class="control-label">Kegiatan: <b id="form-kegiatan-nama"></b></label>
+						</div>
+						<div class="form-group">
+							<label for="form-kegiatan-anggaran" class="control-label">Anggaran: <b id="form-kegiatan-anggaran"></b></label>
+						</div>
+						<div class="form-group">
+							<label for="form-kegiatan-awal" class="control-label">Awal: <b id="form-kegiatan-awal"></b></label>
+						</div>
+						<div class="form-group">
+							<label for="form-kegiatan-akhir" class="control-label">Akhir: <b id="form-kegiatan-akhir"></b></label>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					<h4>Data Realisasi</h4>
+				</div>
+				<div class="panel-body">
+					<form role="form">
+						<div class="form-group">
+							<label for="form-kegiatan-realisasi-anggaran" class="control-label">Anggaran: <b id="form-kegiatan-realisasi-anggaran"></b></label>
+						</div>
+						<div class="form-group">
+							<label for="form-kegiatan-realisasi-fisik" class="control-label">Fisik: <b id="form-kegiatan-realisasi-fisik"></b></label>
+						</div>
+					</form>
+				</div>
+				<div class="panel-footer">
+					<button class="btn btn-primary" id="btn-tambah-realisasi" data-toggle="modal" data-target="#modal-form-realisasi" href="#">Tambah</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal-form-realisasi" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Tutup</span></button>
+				<h4 class="modal-title">Data Realisasi</h4>
+	        </div>
+	        <div class="modal-body">
+				<form role="form">
+					<div class="form-group">
+						<label for="form-realisasi-tahun" class="control-label">Tahun</label>
+						<input type="text" class="form-control" id="form-realisasi-tahun" placeholder="Masukan Tahun" />
+					</div>
+					<div class="form-group">
+						<label for="form-realisasi-bulan" class="control-label">Bulan</label>
+						<input type="text" class="form-control" id="form-realisasi-bulan" list="list-bulan" placeholder="Masukan Bulan" />
+						<datalist id="list-bulan">
+							<option>JANUARY</option>
+							<option>FEBRUARY</option>
+							<option>MARCH</option>
+							<option>APRIL</option>
+							<option>MAY</option>
+							<option>JUNE</option>
+							<option>JULY</option>
+							<option>AUGUST</option>
+							<option>SEPTEMBER</option>
+							<option>OCTOBER</option>
+							<option>NOVEMBER</option>
+							<option>DECEMBER</option>
+						</datalist>
+					</div>
+					<div class="form-group">
+						<label for="form-realisasi-anggaran" class="control-label">Anggaran</label>
+						<input type="text" class="form-control" id="form-realisasi-anggaran" placeholder="Masukan Realisasi Anggaran" />
+					</div>
+					<div class="form-group">
+						<label for="form-realisasi-fisik" class="control-label">Fisik</label>
+						<input type="text" class="form-control" id="form-realisasi-fisik" placeholder="Masukan Realisasi Fisik" />
+					</div>
+				</form>
+	        </div><!-- modal-body -->
+	        <div class="modal-footer">
+				<button class="btn btn-primary" id="btn-simpan-realisasi" data-dismiss="modal">Simpan</button>
+				<button class="btn btn-default" data-dismiss="modal">Tutup</button>
+	        </div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

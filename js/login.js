@@ -8,4 +8,5 @@ $( document ).ready( function () {
 		rest.login( username, password );
 
 	} );
-});
+
+} );
