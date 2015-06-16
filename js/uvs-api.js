@@ -11,11 +11,11 @@
  
 var myUrl = {
 
-	protocol: 'http',
+	protocol: 'https',
 	
-	apiHost: 'localhost:8080',
+	apiHost: 'core-unitedvision.whelastic.net',
 	
-	printHost: 'localhost:8080',
+	printHost: 'core-unitedvision.whelastic.net',
 	
 	apiProject: 'monev',
 	
