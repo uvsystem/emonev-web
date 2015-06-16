@@ -641,7 +641,7 @@ var page = {
 			getAdmin: function() {
 				
 				return '<li class="divider"><hr /></li>' +
-					'<li><a id="menu-skpd" href="#" data-toggle="tooltip" data-placement="right" title="SKPD"><span class="glyphicon glyphicon-home big-icon"></span><b class="icon-text">SKPD</b></a></li>' +
+					'<li><a id="menu-skpd" href="#" data-toggle="tooltip" data-placement="right" title="Unit Kerja"><span class="glyphicon glyphicon-home big-icon"></span><b class="icon-text">Unit Kerja</b></a></li>' +
 					'<li><a id="menu-kegiatan" href="#" data-toggle="tooltip" data-placement="right" title="Kegiatan"><span class="glyphicon glyphicon-user big-icon"></span><b class="icon-text">Kegiatan</b></a></li>' +
 					'<li><a id="menu-operator" href="#" data-toggle="tooltip" data-placement="right" title="Operator"><span class="glyphicon glyphicon-briefcase big-icon"></span><b class="icon-text">Operator</b></a></li>';
 				
@@ -677,7 +677,7 @@ var page = {
 			
 			getAdmin: function() {
 				
-				return '<li><a id="nav-skpd" href="#">SKPD<span class="glyphicon glyphicon-user pull-right"></span></a></li>' +
+				return '<li><a id="nav-skpd" href="#">Unit Kerja<span class="glyphicon glyphicon-user pull-right"></span></a></li>' +
 					'<li><a id="nav-operator" href="#">Operator<span class="glyphicon glyphicon-briefcase pull-right"></span></a></li>' +
 					'<li><a id="nav-kegiatan" href="#">Kegiatan<span class="glyphicon glyphicon-tasks pull-right"></span></a></li>';
 			},
