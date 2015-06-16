@@ -444,37 +444,12 @@ var rest = {
 	 */
 	logout: function ( ) {
 
-		var promise = $.ajax(
-		{
-	        type: 'PUT',
-	        url: myUrl.apiUrl() + '/token/lock/' + operator.getTokenString(),
-		        
-			//contentType: 'application/json',
-					
-	        beforeSend: function ( jqXHR, settings )
-			{
-	            waitModal.show();
-	        }
-	    } );
-				
-	    promise.done( function( result ) {
-				
-			operator.reset();
-				
-			message.write( "Berhasil Logout!" );
+		operator.reset();
 
-			window.location.href = 'login.html';
+		window.location.href = 'index.html';
 
-		});
-		    
-		promise.fail( message.error );
-		    
-		promise.always( function( jqXHR, textStatus ) {
-				
-	        waitModal.hide();
-			
-	    } );
 	}
+
 };
 
 /*
