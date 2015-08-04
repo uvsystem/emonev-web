@@ -1,3 +1,5 @@
+var restAdapter = rest( 'http://localhost:8080', 'monev' );
+
 $( document ).ready( function () {
 	
 	$( '#btn-login' ).click( function () {
@@ -5,7 +7,7 @@ $( document ).ready( function () {
 		var username = $( '#username' ).val();
 		var password = $( '#password' ).val();
 
-		rest.login( username, password );
+		restAdapter.login( username, password );
 
 	} );
 

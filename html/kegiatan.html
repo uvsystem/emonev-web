@@ -1,41 +1,63 @@
 <div class="row">
-	<div class="col-md-3">
-		<a href="#">
-			<div class="alert alert-info" role="alert" id="btn-kegiatan-tambah" data-toggle="modal" data-target="#modal-form-kegiatan" href="#">
-				<span class="glyphicon glyphicon-briefcase big-icon" aria-hidden="true"></span><b class="icon-text">Tambah Kegiatan</b>
-			</div>
-		</a>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-md-12"><!-- table -->
+	<div class="col-md-6"><!-- table -->
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<div class="table-responsive">
-					<table class="table table-striped text-center" id="table-kategori">
+					<table class="table table-striped text-center" id="table-program">
 						<thead>
 							<tr>
-								<th class="center">Unit Kerja</th>
+								<th class="center">Program</th>
 								<th class="center">Nama</th>
-								<th class="center">Anggaran</th>
-								<th class="center">Awal</th>
-								<th class="center">Akhir</th>
-								<th class="center">&nbsp</th>
+								<th class="center">Pagu Anggaran</th>
+								<th class="center">&nbsp;</th>
 							</tr>
 						</thead>
-						<tbody id="table">
-						</tbody>
+						<tbody id="table"></tbody>
 					</table>
-					<div>
-						<a href="#" id="prev" value="0"><span class="glyphicon glyphicon-backward"></a>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<div class="row">
+					<div class="col-md-3">
+						<a href="#" id="prev" value="0"><span class="glyphicon glyphicon-backward big-icon"></a>
 						<a id="pageNumber">1</a>
-						<a href="#" id="next" value="0"><span class="glyphicon glyphicon-forward"></a>
+						<a href="#" id="next" value="0"><span class="glyphicon glyphicon-forward big-icon"></a>
 					</div>
+					<div class="col-md-3">
+						<button type="button" class="btn btn-primary" id="btn-kegiatan-tambah" data-toggle="modal" data-target="#modal-form-kegiatan">
+							<span class="glyphicon glyphicon-plus big-icon" aria-hidden="true"></span><b class="icon-text">Tambah</b>
+						</button>
+					</div>
+					<div class="col-md-6">
+						<div class="input-group">
+							<input type="text" id="txt-kegiatan-satuan-kerja" list="list-satuan-kerja" class="form-control" placeholder="Pilih Satuan Kerja" aria-describedby="basic-addon1" />
+							<datalist id="list-satuan-kerja"></datalist>
+						</div>
+					</div>
+				</div><!-- row -->
+			</div><!-- footer -->
+		</div>
+	</div><!-- table -->
+	<div class="col-md-6"><!-- table -->
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-striped text-center" id="table-anggaran-header">
+						<thead>
+							<tr>
+								<th class="center">Tahun</th>
+								<th class="center">Bulan</th>
+								<th class="center">Rencana Anggaran</th>
+								<th class="center">Realisasi Anggaran</th>
+								<th class="center">&nbsp;</th>
+							</tr>
+						</thead>
+						<tbody id="table-anggaran"></tbody>
+					</table>
 				</div>
 			</div>
 		</div>
-	</div><!-- table -->
+	</div>
 </div>
 
 <div class="modal fade" id="modal-form-kegiatan" role="dialog">
@@ -43,35 +65,156 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Tutup</span></button>
-				<h4 class="modal-title">Data Kegiatan</h4>
+				<h4 class="modal-title">Kegiatan</h4>
 	        </div>
 	        <div class="modal-body">
 				<form role="form">
 					<div class="form-group">
-						<label for="form-kegiatan-skpd" class="control-label">Unit Kerja</label>
-						<input type="text" class="form-control" id="form-kegiatan-skpd" list="list-skpd" placeholder="Pilih Unit Kerja" />
-						<datalist id="list-skpd"></datalist>
+						<label for="form-kegiatan-program" class="control-label">Program</label>
+						<input type="text" class="form-control" id="form-kegiatan-program" placeholder="Masukan Program" list="list-program" />
+						<datalist id="list-program" />
 					</div>
 					<div class="form-group">
 						<label for="form-kegiatan-nama" class="control-label">Nama</label>
 						<input type="text" class="form-control" id="form-kegiatan-nama" placeholder="Masukan Nama" />
 					</div>
 					<div class="form-group">
-						<label for="form-kegiatan-anggaran" class="control-label">Anggaran</label>
-						<input type="text" class="form-control" id="form-kegiatan-anggaran" placeholder="Masukan Anggaran" />
-					</div>
-					<div class="form-group">
-						<label for="form-kegiatan-awal" class="control-label">Awal</label>
-						<input type="text" class="form-control" id="form-kegiatan-awal" placeholder="Masukan Awal" />
-					</div>
-					<div class="form-group">
-						<label for="form-kegiatan-akhir" class="control-label">Akhir</label>
-						<input type="text" class="form-control" id="form-kegiatan-akhir" placeholder="Masukan Akhir" />
+						<label for="form-kegiatan-anggaran" class="control-label">Masukan Anggaran</label>
+						<input type="text" class="form-control" id="form-kegiatan-anggaran" placeholder="Masukan Anggaran Kegiatan" />
 					</div>
 				</form>
 	        </div><!-- modal-body -->
 	        <div class="modal-footer">
-				<button class="btn btn-primary" id="btn-simpan-kegiatan" data-dismiss="modal">Simpan</button>
+				<button class="btn btn-primary" id="btn-kegiatan-simpan" data-dismiss="modal">Simpan</button>
+				<button class="btn btn-default" data-dismiss="modal">Tutup</button>
+	        </div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="modal-form-realisasi" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Tutup</span></button>
+				<h4 class="modal-title">Realisasi Kegiatan</h4>
+	        </div>
+	        <div class="modal-body">
+				<form role="form">
+					<div class="form-group">
+						<label for="form-realisasi-tahun" class="control-label">Tahun</label>
+						<input type="text" class="form-control" id="form-realisasi-tahun" placeholder="Masukan Tahun" list="list-tahun" />
+						<datalist id="list-tahun">
+							<option>2014</option>
+							<option>2015</option>
+							<option>2016</option>
+							<option>2017</option>
+							<option>2018</option>
+							<option>2019</option>
+						</datalist>
+					</div>
+					<div class="form-group">
+						<label for="form-realisasi-bulan" class="control-label">Bulan</label>
+						<input type="text" class="form-control" id="form-realisasi-bulan" placeholder="Masukan Bulan" list="list-bulan" />
+						<datalist id="list-bulan">
+							<option>JANUARY</option>
+							<option>FEBRUARY</option>
+							<option>MARCH</option>
+							<option>APRIL</option>
+							<option>MAY</option>
+							<option>JUNE</option>
+							<option>JULY</option>
+							<option>AUGUST</option>
+							<option>SEPTEMBER</option>
+							<option>OCTOBER</option>
+							<option>NOVEMBER</option>
+							<option>DECEMBER</option>
+						</datalist>
+					</div>
+					<hr />
+					<div class="form-group">
+						<label for="form-realisasi-rencana" class="control-label">Rencana Anggaran</label>
+						<input type="text" class="form-control" id="form-realisasi-rencana" placeholder="Masukan Rencana Anggaran" />
+					</div>
+					<div class="form-group">
+						<label for="form-realisasi-anggaran" class="control-label">Realisasi Anggaran</label>
+						<input type="text" class="form-control" id="form-realisasi-anggaran" placeholder="Masukan Realisasi Anggaran" />
+					</div>
+					<hr />
+					<div class="form-group">
+						<label for="form-realisasi-fisik" class="control-label">Realisasi Fisik</label>
+						<input type="text" class="form-control" id="form-realisasi-fisik" placeholder="Masukan Realisasi Fisik" />
+					</div>
+				</form>
+	        </div><!-- modal-body -->
+	        <div class="modal-footer">
+				<button class="btn btn-primary" id="btn-realisasi-simpan" data-dismiss="modal">Simpan</button>
+				<button class="btn btn-default" data-dismiss="modal">Tutup</button>
+	        </div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="modal-form-realisasi-anggaran" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Tutup</span></button>
+				<h4 class="modal-title">Realisasi Anggaran</h4>
+	        </div>
+	        <div class="modal-body">
+				<form role="form">
+					<div class="form-group">
+						<label for="form-realisasi-tahun" class="control-label">Tahun</label>
+						<input type="text" class="form-control" id="form-realisasi-tahun" readonly list="list-tahun" />
+					</div>
+					<div class="form-group">
+						<label for="form-realisasi-bulan" class="control-label">Bulan</label>
+						<input type="text" class="form-control" id="form-realisasi-bulan" readonly list="list-bulan" />
+					</div>
+					<div class="form-group">
+						<label for="form-realisasi-rencana" class="control-label">Rencana Anggaran</label>
+						<input type="text" class="form-control" id="form-realisasi-anggaran" readonly />
+					</div>
+					<div class="form-group">
+						<label for="form-realisasi-anggaran" class="control-label">Realisasi Anggaran</label>
+						<input type="text" class="form-control" id="form-realisasi-anggaran" placeholder="Masukan Realisasi Anggaran" />
+					</div>
+				</form>
+	        </div><!-- modal-body -->
+	        <div class="modal-footer">
+				<button class="btn btn-primary" id="btn-realisasi-anggaran" data-dismiss="modal">Simpan</button>
+				<button class="btn btn-default" data-dismiss="modal">Tutup</button>
+	        </div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="modal-form-realisasi-fisik" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Tutup</span></button>
+				<h4 class="modal-title">Realisasi Fisik</h4>
+	        </div>
+	        <div class="modal-body">
+				<form role="form">
+					<div class="form-group">
+						<label for="form-realisasi-tahun" class="control-label">Tahun</label>
+						<input type="text" class="form-control" id="form-realisasi-tahun" placeholder="Masukan Tahun" list="list-tahun" />
+					</div>
+					<div class="form-group">
+						<label for="form-realisasi-bulan" class="control-label">Bulan</label>
+						<input type="text" class="form-control" id="form-realisasi-bulan" placeholder="Masukan Bulan" list="list-bulan" />
+					</div>
+					<div class="form-group">
+						<label for="form-realisasi-fisik" class="control-label">Realisasi Fisik</label>
+						<input type="text" class="form-control" id="form-realisasi-fisik" placeholder="Masukan Realisasi Fisik" />
+					</div>
+				</form>
+	        </div><!-- modal-body -->
+	        <div class="modal-footer">
+				<button class="btn btn-primary" id="btn-realisasi-fisik" data-dismiss="modal">Simpan</button>
 				<button class="btn btn-default" data-dismiss="modal">Tutup</button>
 	        </div>
 		</div><!-- /.modal-content -->

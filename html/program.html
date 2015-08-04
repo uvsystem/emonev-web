@@ -1,0 +1,85 @@
+<div class="row">
+	<div class="col-md-12"><!-- table -->
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-striped text-center" id="table-program">
+						<thead>
+							<tr>
+								<th class="center">Satuan Kerja</th>
+								<th class="center">Nama</th>
+								<th class="center">Tanggal Awal</th>
+								<th class="center">Tanggal Akhir</th>
+								<th class="center">&nbsp;</th>
+							</tr>
+						</thead>
+						<tbody id="table"></tbody>
+					</table>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<div class="row">
+					<div class="col-md-4">
+						<a href="#" id="prev" value="0"><span class="glyphicon glyphicon-backward big-icon"></a>
+						<a id="pageNumber">1</a>
+						<a href="#" id="next" value="0"><span class="glyphicon glyphicon-forward big-icon"></a>
+					</div>
+					<div class="col-md-4">
+						<button type="button" class="btn btn-primary" id="btn-program-tambah" data-toggle="modal" data-target="#modal-form-program">
+							<span class="glyphicon glyphicon-plus big-icon" aria-hidden="true"></span><b class="icon-text">Tambah</b>
+						</button>
+					</div>
+					<div class="col-md-4">
+						<div class="input-group">
+							<input type="text" id="txt-program-satuan-kerja" list="list-satuan-kerja" class="form-control" placeholder="Pilih Satuan Kerja" aria-describedby="basic-addon1" />
+							<datalist id="list-satuan-kerja"></datalist>
+						</div>
+					</div>
+				</div><!-- row -->
+			</div><!-- footer -->
+		</div>
+	</div><!-- table -->
+</div>
+
+<div class="modal fade" id="modal-form-program" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Tutup</span></button>
+				<h4 class="modal-title">Program</h4>
+	        </div>
+	        <div class="modal-body">
+				<form role="form">
+					<div class="form-group">
+						<label for="form-program-satuan-kerja" class="control-label">Satuan Kerja</label>
+						<input type="text" class="form-control" id="form-program-satuan-kerja" placeholder="Masukan Satuan Kerja" list="list-satuan-kerja" />
+					</div>
+					<div class="form-group">
+						<label for="form-program-nama" class="control-label">Nama</label>
+						<input type="text" class="form-control" id="form-program-nama" placeholder="Masukan Nama" />
+					</div>
+					<div class="form-group">
+						<label for="form-program-tahun-awal" class="control-label">Tahun Awal</label>
+						<input type="text" class="form-control" id="form-program-tahun-awal" placeholder="Masukan Tahun Awal" list="list-tahun" />
+						<datalist id="list-tahun">
+							<option>2014</option>
+							<option>2015</option>
+							<option>2016</option>
+							<option>2017</option>
+							<option>2018</option>
+							<option>2019</option>
+						</datalist>
+					</div>
+					<div class="form-group">
+						<label for="form-program-tahun-akhir" class="control-label">Masukan Tahun Akhir</label>
+						<input type="text" class="form-control" id="form-program-tahun-akhir" placeholder="Masukan Tahun Akhir" list="list-tahun" />
+					</div>
+				</form>
+	        </div><!-- modal-body -->
+	        <div class="modal-footer">
+				<button class="btn btn-primary" id="btn-program-simpan" data-dismiss="modal">Simpan</button>
+				<button class="btn btn-default" data-dismiss="modal">Tutup</button>
+	        </div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
