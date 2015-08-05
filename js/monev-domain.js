@@ -298,6 +298,7 @@ var kegiatanDomain = {
 				list = [ ];
 			pageNumber = 0;
 
+			kegiatanDomain.listAnggaran = list;
 			activeContainer = {};
 			activeContainer.list = list;
 
@@ -336,10 +337,13 @@ var kegiatanDomain = {
 		realisasiAnggaran: function( id ) {
 
 			kegiatanDomain.currentIdAnggaran = id;
-			$( '#form-realisasi-tahun' ).val( '' );
-			$( '#form-realisasi-bulan' ).val( '' );
-			$( '#form-realisasi-rencana' ).val( '' );
-			$( '#form-realisasi-anggaran' ).val( '' );
+			message.writeLog( JSON.stringify(kegiatanDomain.listAnggaran ) );
+			var anggaran = myList.getById( kegiatanDomain.listAnggaran, id );
+			message.writeLog( JSON.stringify(anggaran) );
+			$( '#form-realisasi-anggaran-tahun' ).val( anggaran.tahun );
+			$( '#form-realisasi-anggaran-bulan' ).val( anggaran.bulan );
+			$( '#form-realisasi-anggaran-rencana' ).val( anggaran.rencana );
+			$( '#form-realisasi-anggaran-realisasi' ).val( anggaran.realisasi );
 
 		},
 		

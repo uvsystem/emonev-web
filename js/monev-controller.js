@@ -213,7 +213,7 @@ $( document ).ready( function () {
 	
 	$( document ).on( 'click', '#btn-realisasi-anggaran', function() {
 		var idAnggaran = kegiatanDomain.currentIdAnggaran;
-		var realisasi = $( '#form-realisasi-anggaran' ).val();
+		var realisasi = $( '#form-realisasi-anggaran-realisasi' ).val();
 		
 		anggaranRestAdapter.realisasi( idAnggaran, realisasi, kegiatanDomain.success );
 		
@@ -222,9 +222,9 @@ $( document ).ready( function () {
 	$( document ).on( 'click', '#btn-realisasi-fisik', function() {
 		var idKegiatan = kegiatanDomain.currentId;
 		var id = kegiatanDomain.currentIdFisik;
-		var tahun = $( '#form-realisasi-tahun' ).val();
-		var bulan = $( '#form-realisasi-bulan' ).val();
-		var realisasi = $( '#form-realisasi-fisik' ).val();
+		var tahun = $( '#form-realisasi-fisik-tahun' ).val();
+		var bulan = $( '#form-realisasi-fisik-bulan' ).val();
+		var realisasi = $( '#form-realisasi-fisik-realisasi' ).val();
 		
 		fisikRestAdapter.save( idKegiatan, id, tahun, bulan, realisai, function( result ) {
 			message.success( result );
