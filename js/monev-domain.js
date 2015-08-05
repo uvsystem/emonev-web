@@ -196,6 +196,11 @@ var kegiatanDomain = {
 
 		page.change( $( '#list-program' ), page.list.dataList.generateFromStorage( programDomain.nama, 'list-program') );
 
+		$( '#table-anggaran-header' ).show();
+		$( '#table-anggaran' ).show();
+		$( '#table-fisik-header' ).hide();
+		$( '#table-fisik' ).hide();
+
 	},
 	
 	content: {
@@ -278,18 +283,14 @@ var kegiatanDomain = {
 		},
 
 		loadList: function( id ) {
-
 			kegiatanDomain.currentId = id;
-			var kegiatan = storage.getById( kegiatanDomain, id );
-			var listFisik = kegiatan.listFisik;
-			
+	
+			var id = kegiatanDomain.currentId;
+		
 			anggaranRestAdapter.findByKegiatan( id, function( result ) {
 				var listAnggaran = result.list;
 				kegiatanDomain.content.loadAnggaran( listAnggaran );
 			});
-
-			kegiatanDomain.content.loadFisik( listFisik );
-
 		},
 	
 		loadAnggaran: function( list ) {
@@ -337,9 +338,7 @@ var kegiatanDomain = {
 		realisasiAnggaran: function( id ) {
 
 			kegiatanDomain.currentIdAnggaran = id;
-			message.writeLog( JSON.stringify(kegiatanDomain.listAnggaran ) );
 			var anggaran = myList.getById( kegiatanDomain.listAnggaran, id );
-			message.writeLog( JSON.stringify(anggaran) );
 			$( '#form-realisasi-anggaran-tahun' ).val( anggaran.tahun );
 			$( '#form-realisasi-anggaran-bulan' ).val( anggaran.bulan );
 			$( '#form-realisasi-anggaran-rencana' ).val( anggaran.rencana );
@@ -355,7 +354,9 @@ var kegiatanDomain = {
 
 			if ( !list )
 				list = [ ];
+			pageNumber = 0;
 
+			kegiatanDomain.listFisik = list;
 			activeContainer = {};
 			activeContainer.list = list;
 
@@ -376,7 +377,7 @@ var kegiatanDomain = {
 						'Pilihan <span class="caret"></span>' +
 					  '</button>' +
 					  '<ul class="dropdown-menu">' +
-						'<li><a href="#" onclick="kegiatanDomain.content.realisasiFisik(' + tmp.id + ')" data-toggle="modal" data-target="#modal-form-realisasi-anggaran">Realisasi</a></li>' +
+						'<li><a href="#" onclick="kegiatanDomain.content.realisasiFisik(' + tmp.id + ')" data-toggle="modal" data-target="#modal-form-realisasi-fisik">Realisasi</a></li>' +
 						'<li><a href="#" onclick="kegiatanDomain.content.hapusFisik(' + tmp.id + ')">Hapus</a></li>' +
 					  '</ul>' +
 					'</div>' +
@@ -392,9 +393,10 @@ var kegiatanDomain = {
 		realisasiFisik: function( id ) {
 
 			kegiatanDomain.currentIdFisik = id;
-			$( '#form-realisasi-tahun' ).val( '' );
-			$( '#form-realisasi-bulan' ).val( '' );
-			$( '#form-realisasi-fisik' ).val( '' );
+			var fisik = myList.getById( kegiatanDomain.listFisik, id );
+			$( '#form-realisasi-fisik-tahun' ).val( fisik.tahun );
+			$( '#form-realisasi-fisik-bulan' ).val( fisik.bulan );
+			$( '#form-realisasi-fisik-realisasi' ).val( fisik.realisasi );
 
 		},
 		

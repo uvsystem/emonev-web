@@ -224,7 +224,7 @@ $( document ).ready( function () {
 		var bulan = $( '#form-realisasi-fisik-bulan' ).val();
 		var realisasi = $( '#form-realisasi-fisik-realisasi' ).val();
 		
-		fisikRestAdapter.save( idKegiatan, id, tahun, bulan, realisai, function( result ) {
+		fisikRestAdapter.save( idKegiatan, id, tahun, bulan, realisasi, function( result ) {
 			message.success( result );
 			kegiatanDomain.reload();
 		});
@@ -234,6 +234,41 @@ $( document ).ready( function () {
 		throw new Error( 'Not yet implemented' );
 	} );
 
+	$( document ).on( 'click', '#tab-anggaran', function() {
+
+		$( '#table-anggaran-header' ).show();
+		$( '#table-anggaran' ).show();
+		$( '#table-fisik-header' ).hide();
+		$( '#table-fisik' ).hide();
+		$( '#tab-anggaran' ).addClass( 'active' );
+		$( '#tab-fisik' ).removeClass( 'active' );
+	
+		var id = kegiatanDomain.currentId;
+	
+		anggaranRestAdapter.findByKegiatan( id, function( result ) {
+			var listAnggaran = result.list;
+			kegiatanDomain.content.loadAnggaran( listAnggaran );
+		});
+	} );
+
+	$( document ).on( 'click', '#tab-fisik', function() {
+
+		$( '#table-anggaran-header' ).hide();
+		$( '#table-anggaran' ).hide();
+		$( '#table-fisik-header' ).show();
+		$( '#table-fisik' ).show();
+		$( '#tab-anggaran' ).removeClass( 'active' );
+		$( '#tab-fisik' ).addClass( 'active' );
+	
+		var id = kegiatanDomain.currentId;
+
+		fisikRestAdapter.findByKegiatan( id, function( result ) {
+			var listFisik = result.list;
+			kegiatanDomain.content.loadFisik( listFisik );
+		});
+	} );
+
+	
 	
 	// Rekap Handler
 	$( document ).on( 'click', '#btn-rekap-satker', function() {
