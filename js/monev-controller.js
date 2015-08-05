@@ -16,7 +16,16 @@ var restAdapter = rest( target, 'monev' );
 
 $( document ).ready( function () {
 
-	authenticate();
+	aplikasiRestAdapter.findKode( function( result ) {
+		kodeAplikasi = result.object;
+	});
+
+
+	if ( !operator.isAuthorized() ) {
+		//window.location.href = 'login.html';
+		return;
+	}
+
 	resetStorage();
 
 	page.change( $( '#operator-nama' ), operator.getName() );
@@ -326,34 +335,6 @@ function resetStorage() {
 	programRestAdapter.findAll( function( result ) {
 		storage.set( ( result ? result.list : [] ), programDomain.nama );
 	});
-};
-
-function authenticate() {
-
-	aplikasiRestAdapter.findKode( function( result ) {
-		kodeAplikasi = result.object;
-	});
-
-	if ( operator.isLogin() == false ) {
-		
-		window.location.href = 'login.html';
-		return;
-		
-	}
-	
-	if ( operator.getTokenString != '********' && operator.getPegawai() ) {
-		
-		if ( ( operator.getRole() != 'ADMIN' && operator.getRole() != 'OPERATOR' ) ) {
-			
-			message.write( 'Maaf, anda tidak bisa mengakses halaman ini' );
-			message.writeLog( 'Maaf, anda tidak bisa mengakses halaman ini' ); // LOG
-			
-			window.location.href = 'login.html';
-			return;
-			
-		}
-		
-	}
 };
 
 function navigation( role ) {

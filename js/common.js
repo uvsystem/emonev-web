@@ -150,7 +150,7 @@ function rest( link, projectName) {
 		call: function( path, data, method, success, error, async ) {
 	
 			// Jika tidak login, redirect ke halaman login.
-			if ( operator.isLogin() == false ) {
+			if ( operator.isAuthenticated() == false ) {
 					
 				window.location.href = 'login.html';
 				return;
@@ -182,6 +182,64 @@ function rest( link, projectName) {
 							waitModal.show();
 						jqXHR.setRequestHeader ("Authorization", "Basic " + btoa( _username + ':' + _password ) );
 						
+					}
+				}
+			);
+	
+		    promise.done( function( result )
+			{
+	
+				// result = JSON.parse( result ); // Otomatis parse object menjadi JSON. Dan eksekusi function
+					
+				if ( result.tipe == "ERROR" )
+					message.logResult( result ); // LOG
+	
+				success( result ); // Eksekusi callback
+					
+			} );
+	
+	
+			promise.fail( error ); // Panggil error ketika terjadi kesalahan
+				  
+			promise.always( function ( jqXHR, textStatus )
+			{
+	
+				if ( waitModal )
+					waitModal.hide();
+				
+		    } );
+		},
+	
+		callFree: function( path, data, method, success, error, async ) {
+	
+			// Jika tidak login, redirect ke halaman login.
+			if ( operator.isAuthenticated() == false ) {
+					
+				window.location.href = 'login.html';
+				return;
+					
+			}
+			
+			if ( async == null )
+				async = true;
+			
+			var targetUrl = this.url + path;
+	
+			var promise = $.ajax(
+				{
+			        type: method,
+			        url: targetUrl,
+					async: async,
+					contentType: 'application/json',
+			        processData: false,
+			        data: JSON.stringify( data ),
+							
+			        beforeSend: function ( jqXHR, settings )
+					{
+						
+						if ( waitModal )
+							waitModal.show();
+
 					}
 				}
 			);
@@ -1236,7 +1294,7 @@ var operator = {
 					return tmp;
 			}
 			
-			message.writeLog( "Operator untuk aplikasi '" + kodeAplikasi + "' tidak ditemukan" ); // LOG
+			throw new Error( "Bukan Operator" );
 			
 		} catch ( e ) {
 			
@@ -1307,7 +1365,9 @@ var operator = {
 			
 		} catch ( e ) {
 			
-			throw e;
+			message.writeLog( e );
+			
+			return "GUEST";
 			
 		}
 	},
@@ -1329,7 +1389,7 @@ var operator = {
 	 * Mengecek apakah token ada dan masih berlaku.
 	 * Jika token ada dan masih berlaku, maka pegawai bisa melakukan proses berikutnya, selain dari pada itu, pegawai harus login kembali.
 	 */
-	isLogin: function() {
+	isAuthenticated: function() {
 
 		try {
 			
@@ -1340,7 +1400,6 @@ var operator = {
 			// Jika token sudah expire, maka user dianggap belum login
 			if ( now.isAfter( expire ) )
 				return false;
-
 			return true;
 				
 		} catch ( e ) {
@@ -1349,5 +1408,33 @@ var operator = {
 			return false;
 			
 		}
+	},
+	
+	isAuthorized: function() {
+
+		if ( this.isAuthenticated() == false )
+			return false;
+		
+		// Reload token
+		restAdapter.callFree( '/token/' + this.getTokenString(), null, 'GET', function( result ) {
+			if ( result.tipe == 'ENTITY')
+				operator.setToken( result.object );
+		}, 
+		message.writeError, 
+		false
+		);
+
+		var role = this.getRole();
+		if ( ( role != 'ADMIN' && role != 'OPERATOR' ) ) {
+
+			message.write( 'Maaf, anda tidak bisa mengakses halaman ini' );
+			message.writeLog( 'Maaf, anda tidak bisa mengakses halaman ini' ); // LOG
+
+			return false;
+
+		}
+		
+		return true;
+		
 	}
 };

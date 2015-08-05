@@ -218,7 +218,7 @@ var kegiatanDomain = {
 				html += '<tr href="#" onclick="kegiatanDomain.content.loadList(' + tmp.id + ')">' +
 					'<td>' + tmp.namaProgram + '</td>' +
 					'<td>' + tmp.nama + '</td>' +
-					'<td>' + tmp.paguAnggaran + '</td>' +
+					'<td>' + number.addCommas( tmp.paguAnggaran ) + '</td>' +
 					'<td>' +
 					'<div class="btn-group">' +
 					  '<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
@@ -311,8 +311,8 @@ var kegiatanDomain = {
 				html += '<tr>' +
 					'<td>' + tmp.tahun + '</td>' +
 					'<td>' + tmp.bulan + '</td>' +
-					'<td>' + tmp.rencana + '</td>' +
-					'<td>' + tmp.realisasi + '</td>' +
+					'<td>' + number.addCommas( tmp.rencana ) + '</td>' +
+					'<td>' + number.addCommas( tmp.realisasi ) + '</td>' +
 					'<td>' +
 					'<div class="btn-group">' +
 					  '<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +

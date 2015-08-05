@@ -390,11 +390,12 @@ var aplikasiRestAdapter = {
 	
 	findKode: function( callback ) {
 		
-		restAdapter.call( '/aplikasi/kode', null, "GET", function( result ) {
+		restAdapter.callFree( '/aplikasi/kode', null, "GET", function( result ) {
 				callback( result );
 				message.writeLog( "Kode aplikasi: " + result.object ); // LOG
 			},
-			message.error
+			message.error,
+			false // Sychronous Access
 		);
 	}
 };
