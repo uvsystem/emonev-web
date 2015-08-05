@@ -12,7 +12,7 @@
  * Version: 1.0.0
  */
 
-var target = 'http://localhost:8080';
+var target = 'https://core-unitedvision.whelastic.net';
 var restAdapter = rest( target, 'monev' );
 
 var programRestAdapter = {

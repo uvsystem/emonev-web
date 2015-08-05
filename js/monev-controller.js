@@ -12,8 +12,6 @@
  * Version: 1.0.0
  */
 
-var restAdapter = rest( target, 'monev' );
-
 $( document ).ready( function () {
 
 	aplikasiRestAdapter.findKode( function( result ) {
