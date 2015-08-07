@@ -57,9 +57,11 @@ $( document ).ready( function () {
 	} );
 
 	$( document ).on( 'click', '#menu-rekap', function() {
-		
-		page.change( $( '#message' ), '');
-		rekapDomain.reload();
+
+		message.write( 'Fitur sedang dikembangkan' );
+	
+		// page.change( $( '#message' ), '');
+		// rekapDomain.reload();
 
 	} );
 
