@@ -1112,16 +1112,11 @@ var printer = {
 
 	submitPost: function( path, params, method ) {
 	
-		// Token menjadi pengganti password user.
-		var _password = operator.getTokenString();
-		var _username = operator.getUsername();
-		var _credential = _username + ':' + _password + '@';
-		
 		method = method || "post"; // Method POST sebagai default.
 
 		var form = document.createElement( "form" );
 		form.setAttribute( "method", method );
-		form.setAttribute( "action", myUrl.printUrl( _credential ) + path );
+		form.setAttribute( "action", path );
 
 		for( var key in params ) {
 		
@@ -1135,7 +1130,6 @@ var printer = {
 				form.appendChild( hiddenField );
 				
 			 }
-			 
 		}
 
 		document.body.appendChild( form );
@@ -1143,7 +1137,6 @@ var printer = {
 		form.submit();
 		
 	}
-	
 };
 
 /*
