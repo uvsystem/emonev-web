@@ -404,8 +404,8 @@ var unitKerjaRestAdapter = {
 	
 	all: function( callback ) {
 
-		var restAdapter = rest( target, 'ehrm' );
-		restAdapter.call( '/satker', null, 'GET',
+		var ehrmRestAdapter = rest( target, 'ehrm' );
+		ehrmRestAdapter.call( '/satker', null, 'GET',
 			function( result ) {
 				message.writeLog( "Mengambil semua unit kerja: " + ( result.list ? result.list.length : 0 ) ); // LOG
 				callback( result );

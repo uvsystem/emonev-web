@@ -1104,22 +1104,7 @@ var storage = {
 	},
 
 	fill: function ( storageName ) {
-		
-		var restAdapter = rest( 'http://localhost:8080', 'ehrm' );
-
-		var success = function( result ) {
-
-			var list = null;
-			
-			if ( result.tipe == 'LIST' )
-				list = result.list;
-			
-			storage.set( list, storageName );
-		};
-
-		var url = "/" + storageName.toLowerCase();
-		
-		restAdapter.call( url, '', 'GET', success, message.empty );
+		throw new Error( 'Not yet implemented' );
 	}
 };
 
@@ -1452,7 +1437,7 @@ var operator = {
 		restAdapter.callFree( '/token/' + this.getTokenString(), null, 'GET', function( result ) {
 			if ( result.tipe == 'ENTITY')
 				operator.setToken( result.object );
-		}, 
+		},
 		message.writeError, 
 		false
 		);
