@@ -20,7 +20,7 @@ $( document ).ready( function () {
 
 
 	if ( !operator.isAuthorized() ) {
-		//window.location.href = 'login.html';
+		window.location.href = 'login.html';
 		return;
 	}
 
