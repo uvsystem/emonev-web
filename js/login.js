@@ -1,4 +1,4 @@
-var restAdapter = rest( 'http://localhost:8080', 'monev' );
+var restAdapter = rest( 'https://core-unitedvision.whelastic.net', 'monev' );
 
 $( document ).ready( function () {
 	
@@ -10,5 +10,4 @@ $( document ).ready( function () {
 		restAdapter.login( username, password );
 
 	} );
-
 } );
