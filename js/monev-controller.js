@@ -273,28 +273,28 @@ $( document ).ready( function () {
 	
 	
 	// Rekap Handler
-	$( document ).on( 'click', '#btn-rekap-satker', function() {
-		throw new Error( 'Not yet implemented' );
-	});
-	
-	$( document ).on( 'click', '#btn-rekap-satker-cetak', function() {
-		throw new Error( 'Not yet implemented' );
-	});
-	
 	$( document ).on( 'click', '#btn-rekap-program', function() {
-		throw new Error( 'Not yet implemented' );
+		$( '#form-rekap-program-tahun' ).val( '' );
+		$( '#form-rekap-program-kode' ).val( '' );
+	});
+	
+	$( document ).on( 'click', '#btn-cetak-rekap-program', function() {
+		var tahun = $( '#form-rekap-program-tahun' ).val();
+		var kode = $( '#form-rekap-program-kode' ).val();
+		
+		printer.submitPost( target + '/monev/program/rekap/tahun/' + tahun + '/satker/' + kode + '/rekap', null, 'GET' );
 	});
 	
 	$( document ).on( 'click', '#btn-rekap-kegiatan', function() {
-		throw new Error( 'Not yet implemented' );
+		$( '#form-rekap-kegiatan-tahun' ).val( '' );
+		$( '#form-rekap-kegiatan-kode' ).val( '' );
 	});
 	
-	$( document ).on( 'click', '#btn-rekap-program-cetak', function() {
-		throw new Error( 'Not yet implemented' );
-	});
-	
-	$( document ).on( 'click', '#btn-rekap-kegiatan-cetak', function() {
-		throw new Error( 'Not yet implemented' );
+	$( document ).on( 'click', '#btn-cetak-rekap-kegiatan', function() {
+		var tahun = $( '#form-rekap-kegiatan-tahun' ).val();
+		var kode = $( '#form-rekap-kegiatan-kode' ).val();
+		
+		printer.submitPost( target + '/monev/kegiatan/rekap/tahun/' + tahun + '/satker/' + kode + '/rekap', null, 'GET' );
 	});
 
 	

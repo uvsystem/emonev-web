@@ -1,0 +1,78 @@
+<div class="row placeholders">
+	<div class="col-xs-6 col-sm-3 placeholder">
+    	<button id="btn-rekap-kegiatan" class="btn btn-transclute" data-toggle="modal" data-target="#modal-rekap-kegiatan">
+        	<img src="images/print.png" width="50" />
+			<p>
+				<span class="text-muted">Rekap Kegiatan</span>
+			</p>
+		</button>
+	</div>
+	<div class="col-xs-6 col-sm-3 placeholder">
+    	<button id="btn-rekap-program" class="btn btn-transclute" data-toggle="modal" data-target="#modal-rekap-program">
+        	<img src="images/print.png" width="50" />
+			<p>
+				<span class="text-muted">Rekap Program</span>
+			</p>
+		</button>
+	</div>
+</div>
+
+<div class="modal fade" id="modal-rekap-kegiatan" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+		    	<h4 class="modal-title">Rekap Kegiatan</h4>
+			</div>
+		    <div class="modal-body">
+		    	<form role="form">
+		            <div class="form-group">
+		              <label for="form-rekap-kegiatan-tahun" class="control-label">Tahun</label>
+					  <input type='text' class="form-control" placeholder="Masukan Tahun" id="form-rekap-kegiatan-tahun" list="list-tahun" />
+					  <datalist>
+						<option>2014</option>
+						<option>2015</option>
+						<option>2016</option>
+						<option>2017</option>
+						<option>2018</option>
+						<option>2019</option>
+					  </datalist>
+		            </div>
+		            <div class="form-group">
+		              <label for="form-rekap-kegiatan-kode" class="control-label">Kode Satuan Kerja:</label>
+					  <input type='text' class="form-control" placeholder="Masukan Kode Satuan Kerja" id="form-rekap-kegiatan-kode"/>
+		            </div>
+		    	</form>
+		    </div><!-- modal-body -->
+			<div class="modal-footer">
+		        <button class="btn btn-default" data-dismiss="modal">Tutup</button>
+		    	<button class="btn btn-primary" id="btn-cetak-rekap-kegiatan">Cetak</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="modal-rekap-program" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+		    	<h4 class="modal-title">Rekap Program</h4>
+			</div>
+		    <div class="modal-body">
+		    	<form role="form">
+		            <div class="form-group">
+		              <label for="form-rekap-program-tahun" class="control-label">Tahun</label>
+					  <input type='text' class="form-control" placeholder="Masukan Tahun" id="form-rekap-program-tahun" list="list-tahun" />
+		            </div>
+		            <div class="form-group">
+		              <label for="form-rekap-program-kode" class="control-label">Kode Satuan Kerja:</label>
+					  <input type='text' class="form-control" placeholder="Masukan Kode Satuan Kerja" id="form-rekap-program-kode"/>
+		            </div>
+		    	</form>
+		    </div><!-- modal-body -->
+			<div class="modal-footer">
+		        <button class="btn btn-default" data-dismiss="modal">Tutup</button>
+		    	<button class="btn btn-primary" id="btn-cetak-rekap-program">Cetak</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
