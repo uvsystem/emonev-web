@@ -185,9 +185,9 @@ var kegiatanDomain = {
 		
 		if ( idSatker ) {
 
-			kegiatanRestAdapter.findBySatker( satker.id, function( result ) {
+			kegiatanRestAdapter.findBySatker( idSatker, function( result ) {
 				if ( result.tipe == 'LIST' )
-					this.load( result.list );
+					kegiatanDomain.load( result.list );
 			});
 		} else {
 			this.load( [] );
@@ -243,6 +243,8 @@ var kegiatanDomain = {
 						'<li><a href="#" onclick="kegiatanDomain.content.setDetail(' + tmp.id + ')" data-toggle="modal" data-target="#modal-form-kegiatan">Detail</a></li>' +
 						'<li><a href="#" onclick="kegiatanDomain.content.tambahSub(' + tmp.id + ')" data-toggle="modal" data-target="#modal-form-kegiatan">Tambah Sub Kegiatan</a></li>' +
 						'<li><a href="#" onclick="kegiatanDomain.content.tambahRencana(' + tmp.id + ')" data-toggle="modal" data-target="#modal-form-realisasi">Tambah Rencana</a></li>' +
+						'<li class="dicider" />' +
+						'<li><a href="#" onclick="kegiatanDomain.content.print(' + tmp.id + ')">Cetak</a></li>' +
 						'<li><a href="#" onclick="kegiatanDomain.content.hapus(' + tmp.id + ')">Hapus</a></li>' +
 					  '</ul>' +
 					'</div>' +
@@ -288,6 +290,10 @@ var kegiatanDomain = {
 			
 		},
 
+		print: function( id ) {
+			printer.submitPost( target + '/monev/kegiatan/' + id + '/rekap/cetak', null, 'GET' );
+		},
+		
 		hapus: function( id ) {
 			kegiatanRestAdapter.delete( id, kegiatanDomain.success );
 		},
@@ -421,7 +427,7 @@ var rekapDomain = {
 	nama: 'REKAP',
 	
 	reload: function() {
-		rekap.content.getContent();
+		this.content.getContent();
 	},
 	
 	content: {

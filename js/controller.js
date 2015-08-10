@@ -23,7 +23,7 @@ $( document ).ready( function () {
 		window.location.href = 'login.html';
 		return;
 	}
-
+	
 	resetStorage();
 
 	page.change( $( '#operator-nama' ), operator.getName() );
@@ -33,8 +33,9 @@ $( document ).ready( function () {
 	var navDef = navigation( operator.getUsername() == 'superuser' ? 'ADMIN' : operator.getRole() );
 	page.change( $( '#nav-menu' ), navDef );
 
-	$( function ()
+	$( function () {
 		$( '[ data-toggle = "tooltip" ]' ).tooltip();
+	} );
 
 	
 	
@@ -51,10 +52,11 @@ $( document ).ready( function () {
 		page.change( $( '#message' ), '');
 		
 		if ( operator.getRole() == 'OPERATOR' ) {
-			$( '#list-satuan-kerja' ).addAttr( 'readonly' );
-			
 			var satuanKerja = operator.getSatuanKerja();
 			kegiatanDomain.reload( satuanKerja.id );
+
+			// Set list satuan kerja as readonly
+			// $( '#list-satuan-kerja' ).addAttr( 'readonly' );
 		} else {
 			kegiatanDomain.reload();
 		}
@@ -122,6 +124,15 @@ $( document ).ready( function () {
 		$( '#form-program-nama' ).val( '' );
 		$( '#form-program-tahun-awal' ).val( '' );
 		$( '#form-program-tahun-akhir' ).val( '' );
+		
+		if ( operator.getRole() == 'OPERATOR' ) {
+			var satuanKerja = operator.getSatuanKerja();
+			
+			$( '#form-program-satuan-kerja' ).val( satuanKerja.nama );
+			
+			// set for-program-satuan-kerja as readonly
+			// $( '#form-program-satuan-kerja' ).addAttr( 'readonly' );
+		}
 		
 	} );
 	
@@ -282,7 +293,7 @@ $( document ).ready( function () {
 		var tahun = $( '#form-rekap-program-tahun' ).val();
 		var kode = $( '#form-rekap-program-kode' ).val();
 		
-		printer.submitPost( target + '/monev/program/rekap/tahun/' + tahun + '/satker/' + kode + '/rekap', null, 'GET' );
+		printer.submitPost( target + '/monev/program/rekap/tahun/' + tahun + '/satker/' + kode + '/cetak', null, 'GET' );
 	});
 	
 	$( document ).on( 'click', '#btn-rekap-kegiatan', function() {
@@ -294,7 +305,7 @@ $( document ).ready( function () {
 		var tahun = $( '#form-rekap-kegiatan-tahun' ).val();
 		var kode = $( '#form-rekap-kegiatan-kode' ).val();
 		
-		printer.submitPost( target + '/monev/kegiatan/rekap/tahun/' + tahun + '/satker/' + kode + '/rekap', null, 'GET' );
+		printer.submitPost( target + '/monev/kegiatan/rekap/tahun/' + tahun + '/satker/' + kode + '/cetak', null, 'GET' );
 	});
 
 	
@@ -374,7 +385,7 @@ function resetStorage() {
 	if ( operator.getRole() == 'OPERATOR' ) {
 		var satuanKerja = operator.getSatuanKerja();
 		
-		programRestAdapter.findBySatker( satker.id, onSuccessProgram );
+		programRestAdapter.findBySatker( satuanKerja.id, onSuccessProgram );
 	} else if ( operator.getRole() == 'ADMIN' ) {
 		programRestAdapter.findAll( onSuccessProgram );
 	}
