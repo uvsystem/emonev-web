@@ -179,9 +179,19 @@ var kegiatanDomain = {
 		kegiatanDomain.reload();
 	},
 	
-	reload: function() {
+	reload: function( idSatker ) {
+		
 		page.setName( this.nama );
-		this.load( [] );
+		
+		if ( idSatker ) {
+
+			kegiatanRestAdapter.findBySatker( satker.id, function( result ) {
+				if ( result.tipe == 'LIST' )
+					this.load( result.list );
+			});
+		} else {
+			this.load( [] );
+		}
 	},
 	
 	load: function( list ) {
@@ -411,17 +421,13 @@ var rekapDomain = {
 	nama: 'REKAP',
 	
 	reload: function() {
-		
 		rekap.content.getContent();
-		
 	},
 	
 	content: {
 		
 		getContent: function() {
-
 			page.load( $( '#content' ), 'html/rekap.html');
-			
 		}
 	}
 };

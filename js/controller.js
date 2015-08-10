@@ -33,11 +33,8 @@ $( document ).ready( function () {
 	var navDef = navigation( operator.getUsername() == 'superuser' ? 'ADMIN' : operator.getRole() );
 	page.change( $( '#nav-menu' ), navDef );
 
-	$( function () {
-	
+	$( function ()
 		$( '[ data-toggle = "tooltip" ]' ).tooltip();
-	  
-	} );
 
 	
 	
@@ -52,17 +49,20 @@ $( document ).ready( function () {
 	$( document ).on( 'click', '#menu-kegiatan', function() {
 
 		page.change( $( '#message' ), '');
-		kegiatanDomain.reload();
-
+		
+		if ( operator.getRole() == 'OPERATOR' ) {
+			$( '#list-satuan-kerja' ).addAttr( 'readonly' );
+			
+			var satuanKerja = operator.getSatuanKerja();
+			kegiatanDomain.reload( satuanKerja.id );
+		} else {
+			kegiatanDomain.reload();
+		}
 	} );
 
 	$( document ).on( 'click', '#menu-rekap', function() {
-
-		message.write( 'Fitur sedang dikembangkan' );
-	
-		// page.change( $( '#message' ), '');
-		// rekapDomain.reload();
-
+		page.change( $( '#message' ), '');
+		rekapDomain.reload();
 	} );
 
 	$( document ).on( 'click', '#nav-logout', function() {
@@ -367,9 +367,17 @@ function resetStorage() {
 		storage.set( ( result ? result.list : [] ), satkerDomain.nama );
 	});
 
-	programRestAdapter.findAll( function( result ) {
+	var onSuccessProgram = function( result ) {
 		storage.set( ( result ? result.list : [] ), programDomain.nama );
-	});
+	};
+	
+	if ( operator.getRole() == 'OPERATOR' ) {
+		var satuanKerja = operator.getSatuanKerja();
+		
+		programRestAdapter.findBySatker( satker.id, onSuccessProgram );
+	} else if ( operator.getRole() == 'ADMIN' ) {
+		programRestAdapter.findAll( onSuccessProgram );
+	}
 };
 
 function navigation( role ) {
