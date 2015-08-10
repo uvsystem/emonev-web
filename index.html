@@ -15,33 +15,27 @@
 	<link rel="stylesheet" href="css/dashboard.css">
 	<link rel="stylesheet" href="css/google-font.css">
 	
-    <title>Monitoring & Evaluasi</title>
+    <title>Monitoring & Evaluasi | Pemerintah Kabupaten Kepulauan Sangihe</title>
   </head>
   <body>
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
 
-        <div class="navbar-header col-md-2">
+        <div class="navbar-header col-md-4">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a id="link-sangihe" class="navbar-brand" href="#">Kab. Sangihe</a>
+          <a id="link-sangihe" class="navbar-brand" data-toggle="tooltip" data-placement="right" title="Aplikasi Monitoring & Evaluasi Penyerapan Program & Anggaran">Aplikasi Monitoring & Evaluasi PPA</a>
         </div>
 
 		<!-- Navigation -->
         <div id="navigation-panel" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li><a id="nav-home" href="#">Home</a></li>
-			<li role="presentation" class="dropdown">
-			    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
-			      Menu<span class="caret"></span>
-			    </a>
-			    <ul class="dropdown-menu" role="menu" id="menu-nav"></ul>
-			</li>
 			<li role="presentation" class="dropdown">
 			    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
 			      <b id="operator-nama" class="icon-text-left">Nama Operator</b>
@@ -63,7 +57,7 @@
 
 		<!-- sidebar menu -->
         <div id="menu-panel" class="col-sm-2 col-md-2 sidebar">
-		  <input id="search" type="text" class="form-control" placeholder="Cari..." />
+		  <input id="search" type="text" class="form-control" placeholder="Cari..." data-toggle="tooltip" data-placement="right" title="Masukan Kata Kunci"/>
           <ul class="nav nav-sidebar" id="nav-menu"></ul>
         </div>
 		<!-- end of sidebar -->
