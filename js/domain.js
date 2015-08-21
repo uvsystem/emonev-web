@@ -149,7 +149,7 @@ var programDomain = {
 			programDomain.currentId = id;
 			var program = storage.getById( programDomain, id );
 
-			$( '#form-program-satuan-kerja' ).val( program.unitKerja.nama );
+			$( '#form-program-satuan-kerja' ).val( program.namaUnitKerja );
 			$( '#form-program-nama' ).val( program.nama );
 			$( '#form-program-tahun-awal' ).val( program.tahunAwal );
 			$( '#form-program-tahun-akhir' ).val( program.tahunAkhir );
