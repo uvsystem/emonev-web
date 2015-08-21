@@ -186,8 +186,10 @@ var kegiatanDomain = {
 		if ( idSatker ) {
 
 			kegiatanRestAdapter.findBySatker( idSatker, function( result ) {
+				var list = [];
 				if ( result.tipe == 'LIST' )
-					kegiatanDomain.load( result.list );
+					list = result.list;
+				kegiatanDomain.load( list );
 			});
 		} else {
 			this.load( [] );
@@ -195,6 +197,9 @@ var kegiatanDomain = {
 	},
 	
 	load: function( list ) {
+		
+		if ( !list )
+			list = [];
 
 		page.load( $( '#content' ), 'html/kegiatan.html' );
 
@@ -262,7 +267,7 @@ var kegiatanDomain = {
 
 			var kegiatan = storage.getById( kegiatanDomain, id );
 			kegiatanDomain.currentId = id;
-			$( '#form-kegiatan-program' ).val( kegiatan.program.nama );
+			$( '#form-kegiatan-program' ).val( kegiatan.namaProgram );
 			$( '#form-kegiatan-nama' ).val( kegiatan.nama );
 			$( '#form-kegiatan-anggaran' ).val( kegiatan.paguAnggaran );
 
@@ -270,10 +275,14 @@ var kegiatanDomain = {
 
 		tambahSub: function( id ) {
 
+			var tmp = storage.getById( kegiatanDomain, id );
+		
 			page.change( $( '#message' ), '');
 			kegiatanDomain.currentId = 0;
 			kegiatanDomain.currentParentId = id;
-			$( '#form-kegiatan-program' ).val( '' );
+			
+			$( '#form-kegiatan-program' ).prop( 'readonly', true );
+			$( '#form-kegiatan-program' ).val( tmp.namaProgram );
 			$( '#form-kegiatan-nama' ).val( '' );
 			$( '#form-kegiatan-anggaran' ).val( '' );
 

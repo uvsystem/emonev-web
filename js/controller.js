@@ -164,6 +164,7 @@ $( document ).ready( function () {
 
 		page.change( $( '#message' ), '');
 		kegiatanDomain.currentId = 0;
+		kegiatanDomain.currentParentId = 0;
 		$( '#form-kegiatan-program' ).val( '' );
 		$( '#form-kegiatan-nama' ).val( '' );
 		$( '#form-kegiatan-anggaran' ).val( '' );
@@ -173,23 +174,17 @@ $( document ).ready( function () {
 	$( document ).on( 'click', '#btn-kegiatan-simpan', function() {
 
 		var id = kegiatanDomain.currentId;
+		var idParent = kegiatanDomain.currentParentId;
+
 		var program = storage.getByNama( programDomain, $( '#form-kegiatan-program' ).val());
 		var nama = $( '#form-kegiatan-nama' ).val();
 		var paguAnggaran = $( '#form-kegiatan-anggaran' ).val();
-	
-		kegiatanRestAdapter.save( program.id, id, nama, paguAnggaran, kegiatanDomain.success );
-	} );
-	
-	$( document ).on( 'click', '#btn-sub-kegiatan-simpan', function() {
 
-		var idKegiatan = kegiatanDomain.currentParentId;
-		var id = kegiatanDomain.currentId;
-		var program = storage.getByNama( programDomain, $( '#form-kegiatan-program' ).val());
-		var nama = $( '#form-kegiatan-nama' ).val();
-		var paguAnggaran = $( '#form-kegiatan-anggaran' ).val();
-	
-		kegiatanRestAdapter.addSub( idKegiatan, id, nama, paguAnggaran, kegiatanDomain.success );
-
+		if ( idParent == 0 ) {
+			kegiatanRestAdapter.save( program.id, id, nama, paguAnggaran, kegiatanDomain.success );
+		} else {
+			kegiatanRestAdapter.addSub( idParent, id, nama, paguAnggaran, kegiatanDomain.success );
+		}
 	} );
 
 	$( document ).on( 'change', '#txt-kegiatan-satuan-kerja', function() {
