@@ -93,8 +93,6 @@ var programDomain = {
 	
 		page.load( $( '#content' ), 'html/program.html' );
 
-		this.content.setData( list );
-
 		storage.set( list, this.nama );
 
 		page.change( $( '#list-satuan-kerja' ), page.list.dataList.generateFromStorage( satkerDomain.nama, 'list-satuan-kerja') );
