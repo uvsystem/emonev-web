@@ -95,6 +95,8 @@ var programDomain = {
 
 		storage.set( list, this.nama );
 
+		this.content.setData( list );
+
 		page.change( $( '#list-satuan-kerja' ), page.list.dataList.generateFromStorage( satkerDomain.nama, 'list-satuan-kerja') );
 		
 	},
