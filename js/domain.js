@@ -83,15 +83,31 @@ var programDomain = {
 	
 	reload: function() {
 		page.setName( this.nama );
-		
-		var list = storage.get( programDomain.nama );
-		
-		this.load( list );
+
+		var onSuccessProgram = function( result ) {
+			var list = [];
+			if ( result.tipe == 'LIST' )
+				list = result.list;
+			programDomain.load( list );
+			
+			storage.set( list, programDomain.nama );
+		};
+
+		if ( operator.getRole() == 'OPERATOR' ) {
+			var satuanKerja = operator.getSatuanKerja();
+
+			programRestAdapter.findBySatker( satuanKerja.id, onSuccessProgram );
+		} else if ( operator.getRole() == 'ADMIN' ) {
+			programRestAdapter.findAll( onSuccessProgram );
+		}
 	},
 	
 	load: function( list ) {
 	
 		page.load( $( '#content' ), 'html/program.html' );
+
+		if ( operator.getRole() == 'OPERATOR' )
+			$( '#form-program-satuan-kerja' ).attr( 'readonly', 'readonly' );
 
 		storage.set( list, this.nama );
 
@@ -179,20 +195,25 @@ var kegiatanDomain = {
 		kegiatanDomain.reload();
 	},
 	
-	reload: function( idSatker ) {
-		
+	reload: function() {
+
 		page.setName( this.nama );
 		
-		if ( idSatker ) {
+		var onSuccessKegiatan = function( result ) {
+			var list = [];
+			if ( result.tipe == 'LIST' )
+				list = result.list;
+			kegiatanDomain.load( list );
+			
+			storage.set( list, kegiatanDomain.nama );
+		};
 
-			kegiatanRestAdapter.findBySatker( idSatker, function( result ) {
-				var list = [];
-				if ( result.tipe == 'LIST' )
-					list = result.list;
-				kegiatanDomain.load( list );
-			});
+		if ( operator.getRole() == 'OPERATOR' ) {
+			var satuanKerja = operator.getSatuanKerja();
+
+			kegiatanRestAdapter.findBySatker( satuanKerja.id, onSuccessKegiatan );
 		} else {
-			this.load( [] );
+			kegiatanRestAdapter.findAll( onSuccessKegiatan );
 		}
 	},
 	
@@ -202,6 +223,9 @@ var kegiatanDomain = {
 			list = [];
 
 		page.load( $( '#content' ), 'html/kegiatan.html' );
+
+		if ( operator.getRole() == 'OPERATOR' )
+			$( '#txt-kegiatan-satuan-kerja' ).attr( 'readonly', 'readonly' );
 
 		this.content.setData( list );
 

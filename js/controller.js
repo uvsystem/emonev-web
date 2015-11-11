@@ -50,16 +50,8 @@ $( document ).ready( function () {
 	$( document ).on( 'click', '#menu-kegiatan', function() {
 
 		page.change( $( '#message' ), '');
+		kegiatanDomain.reload();
 		
-		if ( operator.getRole() == 'OPERATOR' ) {
-			var satuanKerja = operator.getSatuanKerja();
-			kegiatanDomain.reload( satuanKerja.id );
-
-			// Set list satuan kerja as readonly
-			// $( '#list-satuan-kerja' ).addAttr( 'readonly' );
-		} else {
-			kegiatanDomain.reload();
-		}
 	} );
 
 	$( document ).on( 'click', '#menu-rekap', function() {
@@ -372,18 +364,6 @@ function resetStorage() {
 	unitKerjaRestAdapter.all( function( result ) {
 		storage.set( ( result ? result.list : [] ), satkerDomain.nama );
 	});
-
-	var onSuccessProgram = function( result ) {
-		storage.set( ( result ? result.list : [] ), programDomain.nama );
-	};
-	
-	if ( operator.getRole() == 'OPERATOR' ) {
-		var satuanKerja = operator.getSatuanKerja();
-		
-		programRestAdapter.findBySatker( satuanKerja.id, onSuccessProgram );
-	} else if ( operator.getRole() == 'ADMIN' ) {
-		programRestAdapter.findAll( onSuccessProgram );
-	}
 };
 
 function navigation( role ) {
