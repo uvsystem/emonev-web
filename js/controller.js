@@ -373,8 +373,8 @@ function navigation( role ) {
 		return '' +
 			'<li class="divider">&nbsp;</li>' +
 			'<li><a id="menu-program" href="#" data-toggle="tooltip" data-placement="right" title="Program"><span class="glyphicon glyphicon-home big-icon"></span><b class="icon-text">Program</b></a></li>' +
-			'<li><a id="menu-kegiatan" href="#" data-toggle="tooltip" data-placement="right" title="Kegiatan"><span class="glyphicon glyphicon-briefcase big-icon"></span><b class="icon-text">Kegiatan</b></a></li>' +
-			'<li><a id="menu-rekap" href="#" data-toggle="tooltip" data-placement="right" title="Rekap"><span class="glyphicon glyphicon-briefcase big-icon"></span><b class="icon-text">Rekap</b></a></li>';
+			'<li><a id="menu-kegiatan" href="#" data-toggle="tooltip" data-placement="right" title="Kegiatan"><span class="glyphicon glyphicon-briefcase big-icon"></span><b class="icon-text">Kegiatan</b></a></li>';
+			// '<li><a id="menu-rekap" href="#" data-toggle="tooltip" data-placement="right" title="Rekap"><span class="glyphicon glyphicon-briefcase big-icon"></span><b class="icon-text">Rekap</b></a></li>';
 
 	} else {
 		throw new Error( "Role: '" + role + "' is unknown" );
