@@ -270,10 +270,10 @@ var kegiatanDomain = {
 					  '</button>' +
 					  '<ul class="dropdown-menu">' +
 						'<li><a href="#" onclick="kegiatanDomain.content.setDetail(' + tmp.id + ')" data-toggle="modal" data-target="#modal-form-kegiatan">Detail</a></li>' +
-						'<li><a href="#" onclick="kegiatanDomain.content.tambahSub(' + tmp.id + ')" data-toggle="modal" data-target="#modal-form-kegiatan">Tambah Sub Kegiatan</a></li>' +
+						// '<li><a href="#" onclick="kegiatanDomain.content.tambahSub(' + tmp.id + ')" data-toggle="modal" data-target="#modal-form-kegiatan">Tambah Sub Kegiatan</a></li>' +
 						'<li><a href="#" onclick="kegiatanDomain.content.tambahRencana(' + tmp.id + ')" data-toggle="modal" data-target="#modal-form-realisasi">Tambah Rencana</a></li>' +
 						'<li class="dicider" />' +
-						'<li><a href="#" onclick="kegiatanDomain.content.print(' + tmp.id + ')">Cetak</a></li>' +
+						// '<li><a href="#" onclick="kegiatanDomain.content.print(' + tmp.id + ')">Cetak</a></li>' +
 						'<li><a href="#" onclick="kegiatanDomain.content.hapus(' + tmp.id + ')">Hapus</a></li>' +
 					  '</ul>' +
 					'</div>' +
