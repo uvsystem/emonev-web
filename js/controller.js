@@ -65,6 +65,16 @@ $( document ).ready( function () {
 		monevRestAdapter.logout();
 
 	} );
+
+	$( document ).on( 'click', '#btn-ubah-password', function() {
+
+		var password = $( '#form-password' ).val();
+		var pegawai = operator.getPegawai();
+
+		pegawaiRestAdapter.updatePassword( pegawai.id, password, function( result ) {
+			message.success( result );
+		} );
+	} );
 	
 	
 	

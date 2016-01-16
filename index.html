@@ -42,8 +42,8 @@
 				  <span class="glyphicon glyphicon-user big-icon pull-right"></span>
 			    </a>
 			    <ul class="dropdown-menu" role="menu">
-					<li><a id="nav-user" href="#">Edit<span class="glyphicon glyphicon-pencil pull-right"></span></a></li>
-					<li><a id="nav-logout" href="#">Keluar<span class="glyphicon glyphicon-user pull-right"></span></a></li>
+					<li><a id="nav-password" href="#" data-toggle="modal" data-target="#modal-form-password">Update Password</a></li>
+					<li><a id="nav-logout" href="#">Keluar</a></li>
 			    </ul>
 			</li>
           </ul>
@@ -85,6 +85,30 @@
       </div> <!-- row -->
     </div> <!-- container-fluid -->
 
+	<!-- Modal untuk mengubah password -->
+	<div class="modal fade" id="modal-form-password" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Tutup</span></button>
+					<h4 class="modal-title">Update Password</h4>
+				</div>
+				<div class="modal-body">
+					<form role="form">
+						<div class="form-group">
+							<label for="form-password" class="control-label">Password Baru</label>
+							<input type="text" class="form-control" id="form-password" placeholder="Masukan Password Baru" />
+						</div>
+					</form>
+				</div><!-- modal-body -->
+				<div class="modal-footer">
+					<button class="btn btn-primary" id="btn-ubah-password" data-dismiss="modal">Simpan</button>
+					<button class="btn btn-default" data-dismiss="modal">Tutup</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
 	<!-- Required Library -->	
 	<!-- jQuery Library -->
     <script src="js/jquery.min.js"></script>
@@ -95,10 +119,14 @@
 	<script src="js/bootstrap-select.min.js"></script>
 	<script src="js/tooltip.js"></script>
 
-    <!-- UnitedVision's JS -->
+    <!-- UnitedVision's JS
     <script src="https://uvs.web.id/api-v1/js/common.js"></script>
     <script src="https://uvs.web.id/api-v1/js/ehrm.js"></script>
     <script src="https://uvs.web.id/api-v1/js/monev.js"></script>
+	-->
+    <script src="js/common.js"></script>
+    <script src="js/ehrm.js"></script>
+    <script src="js/monev.js"></script>
     <script src="js/domain.js"></script>
     <script src="js/controller.js"></script>
 
