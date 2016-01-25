@@ -19,13 +19,14 @@ var monevRestAdapter = rest( target, 'monev' );
 
 var programRestAdapter = {
 
-	save: function( idSatuanKerja, id, nama, tahunAwal, tahunAkhir, callback ) {
+	save: function( idSatuanKerja, id, nama, tahunAwal, tahunAkhir, parent, callback ) {
 
 		var program = {
 			id: id,
 			nama: nama,
 			tahunAwal: tahunAwal,
-			tahunAkhir: tahunAkhir
+			tahunAkhir: tahunAkhir,
+			parent: parent
 		};
 		
 		monevRestAdapter.call( '/program/' + idSatuanKerja, program, 'POST',

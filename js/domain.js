@@ -114,6 +114,7 @@ var programDomain = {
 		this.content.setData( list );
 
 		page.change( $( '#list-satuan-kerja' ), page.list.dataList.generateFromStorage( satkerDomain.nama, 'list-satuan-kerja') );
+		page.change( $( '#list-program' ), page.list.dataList.generateFromStorage( programDomain.nama, 'list-program') );
 		
 	},
 	
@@ -164,7 +165,11 @@ var programDomain = {
 
 			programDomain.currentId = id;
 			var program = storage.getById( programDomain, id );
-
+			var parent = program.parent;
+			
+			message.writeLog(parent);
+			if ( parent )
+				$( '#form-program-program' ).val( parent.nama );
 			$( '#form-program-satuan-kerja' ).val( program.namaUnitKerja );
 			$( '#form-program-nama' ).val( program.nama );
 			$( '#form-program-tahun-awal' ).val( program.tahunAwal );
@@ -232,7 +237,6 @@ var kegiatanDomain = {
 		storage.set( list, this.nama );
 		
 		page.change( $( '#list-satuan-kerja' ), page.list.dataList.generateFromStorage( satkerDomain.nama, 'list-satuan-kerja') );
-
 		page.change( $( '#list-program' ), page.list.dataList.generateFromStorage( programDomain.nama, 'list-program') );
 
 		$( '#table-anggaran-header' ).show();

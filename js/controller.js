@@ -141,12 +141,13 @@ $( document ).ready( function () {
 	$( document ).on( 'click', '#btn-program-simpan', function() {
 
 		var id = programDomain.currentId;
+		var parent = storage.getByNama( programDomain, $( '#form-program-program' ).val() );
 		var satker = storage.getByNama( satkerDomain, $( '#form-program-satuan-kerja' ).val() );
 		var nama = $( '#form-program-nama' ).val();
 		var tahunAwal = $( '#form-program-tahun-awal' ).val();
 		var tahunAkhir = $( '#form-program-tahun-akhir' ).val();
 	
-		programRestAdapter.save( satker.id, id, nama, tahunAwal, tahunAkhir, programDomain.success );
+		programRestAdapter.save( satker.id, id, nama, tahunAwal, tahunAkhir, parent, programDomain.success );
 	} );
 
 	$( document ).on( 'change', '#txt-program-satuan-kerja', function() {
