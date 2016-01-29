@@ -295,15 +295,15 @@ $( document ).ready( function () {
 	});
 	
 	$( document ).on( 'click', '#btn-rekap-kegiatan', function() {
-		$( '#form-rekap-kegiatan-tahun' ).val( '' );
-		$( '#form-rekap-kegiatan-kode' ).val( '' );
+		$( '#form-rekap-kegiatan-tanggal-awal' ).val( '' );
+		$( '#form-rekap-kegiatan-tanggal-akhir' ).val( '' );
 	});
 	
 	$( document ).on( 'click', '#btn-cetak-rekap-kegiatan', function() {
 		var tahun = $( '#form-rekap-kegiatan-tahun' ).val();
-		var kode = $( '#form-rekap-kegiatan-kode' ).val();
+		var bulan = $( '#form-rekap-kegiatan-bulan' ).val();
 		
-		printer.submitPost( target + '/monev/kegiatan/rekap/tahun/' + tahun + '/satker/' + kode + '/cetak', null, 'GET' );
+		printer.submitPost( target + '/monev/kegiatan/rekap/tahun/' + tahun + '/bulan/' + bulan + '/cetak', null, 'GET' );
 	});
 
 	
@@ -384,8 +384,8 @@ function navigation( role ) {
 		return '' +
 			'<li class="divider">&nbsp;</li>' +
 			'<li><a id="menu-program" href="#" data-toggle="tooltip" data-placement="right" title="Program"><span class="glyphicon glyphicon-home big-icon"></span><b class="icon-text">Program</b></a></li>' +
-			'<li><a id="menu-kegiatan" href="#" data-toggle="tooltip" data-placement="right" title="Kegiatan"><span class="glyphicon glyphicon-briefcase big-icon"></span><b class="icon-text">Kegiatan</b></a></li>';
-			// '<li><a id="menu-rekap" href="#" data-toggle="tooltip" data-placement="right" title="Rekap"><span class="glyphicon glyphicon-briefcase big-icon"></span><b class="icon-text">Rekap</b></a></li>';
+			'<li><a id="menu-kegiatan" href="#" data-toggle="tooltip" data-placement="right" title="Kegiatan"><span class="glyphicon glyphicon-briefcase big-icon"></span><b class="icon-text">Kegiatan</b></a></li>' +
+			'<li><a id="menu-rekap" href="#" data-toggle="tooltip" data-placement="right" title="Rekap"><span class="glyphicon glyphicon-briefcase big-icon"></span><b class="icon-text">Rekap</b></a></li>';
 
 	} else {
 		throw new Error( "Role: '" + role + "' is unknown" );
